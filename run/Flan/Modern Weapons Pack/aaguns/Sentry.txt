@@ -8,10 +8,10 @@ Model mw.SentryGun
 //Place the texture .png in the skins folder
 Texture SentryGun
 NumBarrels 4
-Barrel 0 40 6 6
-Barrel 1 40 6 6
-Barrel 2 40 6 6
-Barrel 3 40 6 6
+Barrel 0 20 22 4
+Barrel 1 20 20 4
+Barrel 2 20 22 -4
+Barrel 3 20 20 -4
 FireAlternately False
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 100

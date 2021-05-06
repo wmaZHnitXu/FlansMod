@@ -14,6 +14,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -383,7 +384,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						}
 						shootDelay = type.shootDelay;
 						barrelRecoil[j] = type.recoil;
-						FlansMod.log.info("bas4");
 						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
 								type.barrelY[currentBarrel] / 16D,
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
@@ -425,7 +425,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			placer = world.getPlayerEntityByName(placerName);
 		}
 		
-		for(Object obj : world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(type.targetRange, type.targetRange, type.targetRange)))
+		BlockPos a = getPosition().add(type.targetRange, type.targetRange, type.targetRange);
+		BlockPos b = getPosition().add(-type.targetRange, -type.targetRange, -type.targetRange);
+		for(Object obj : world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(b,a)))
 		{
 			Entity candidateEntity = (Entity)obj;
 			
