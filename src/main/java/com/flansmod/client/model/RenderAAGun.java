@@ -52,7 +52,9 @@ public class RenderAAGun extends Render<EntityAAGun>
 	@Override
 	protected ResourceLocation getEntityTexture(EntityAAGun entity)
 	{
-		return FlansModResourceHandler.getTexture(entity.type);
+		ResourceLocation result = FlansModResourceHandler.getTexture(entity.type);
+		if (!entity.type.hasStatus || entity.status == 0) return result;
+		return new ResourceLocation(result.getPath().substring(0, result.getPath().length() - 4) + entity.status + ".png");
 	}
 	
 	public static class Factory implements IRenderFactory<EntityAAGun>

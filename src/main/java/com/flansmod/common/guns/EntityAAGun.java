@@ -2,7 +2,10 @@ package com.flansmod.common.guns;
 
 import org.lwjgl.input.Mouse;
 
+import ic2.core.block.wiring.TileEntityChargepadBlock;
+import ic2.core.block.wiring.TileEntityChargepadCESU;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityMob;
@@ -10,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -28,13 +32,14 @@ import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
 import com.flansmod.common.PlayerData;
 import com.flansmod.common.PlayerHandler;
+import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.network.PacketAAGunAngles;
+import com.flansmod.common.network.PacketAAGunStatus;
 import com.flansmod.common.network.PacketMGFire;
 import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
-import com.flansmod.common.driveables.EntityDriveable; //ANET
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {
@@ -66,6 +71,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public int currentBarrel; // For cycling through firing each barrel
 	public boolean mouseHeld;
 	public boolean wasShooting;
+	public int status;
 	
 	//Sentry stuff
 	/**
@@ -408,7 +414,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		}
 		if(!world.isRemote)
 		{
-			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunAngles(this), posX, posY, posZ, 50F, dimension);
+			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunAngles(this), posX, posY, posZ, 100F, dimension);
+			if (ticksExisted % 10 == 0) getStatus();
+			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunStatus(this), posX, posY, posZ, 100F, dimension);
 		}
 	}
 	
@@ -615,5 +623,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public ItemStack getPickedResult(RayTraceResult target)
 	{
 		return new ItemStack(type.item, 1, 0);
+	}
+
+	public int getStatus () {
+		if (ammo == null || ammo.isEmpty()) return 2;
+		TileEntity te = world.getTileEntity(getPosition().down());
+		if (te == null || (te instanceof TileEntityChargepadBlock && ((TileEntityChargepadBlock)te).getStored() < 32)) return 1;
+		return 0; 
 	}
 }

@@ -35,6 +35,7 @@ public class AAGunType extends InfoType
 	public ModelAAGun model;
 	public float topViewLimit = 75F;
 	public float bottomViewLimit = 0F;
+	public boolean hasStatus;
 	public int[] barrelX, barrelY, barrelZ;
 	/**
 	 * Sentry mode. If target players is true then it either targets everyone on the other team, or everyone other than the owner when not playing with teams
@@ -85,6 +86,9 @@ public class AAGunType extends InfoType
 			shareAmmo = Read(split, "ShareAmmo", shareAmmo);
 			targetRange = Read(split, "TargetRange", targetRange);
 			bottomViewLimit = Read(split, "BottomViewLimit", bottomViewLimit);
+			
+			if(split[0].equals("HasStatus"))
+				hasStatus = Boolean.parseBoolean(split[1]);
 			
 			if(split[0].equals("TargetDriveables"))
 				targetMechas = targetPlanes = targetVehicles = Boolean.parseBoolean(split[1]);

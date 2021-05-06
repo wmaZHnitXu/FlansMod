@@ -184,6 +184,7 @@ public class PacketHandler extends MessageToMessageCodec<FMLProxyPacket, PacketB
 	{
 		channels = NetworkRegistry.INSTANCE.newChannel("FlansMod", this);
 		
+		registerPacket(PacketAAGunStatus.class);
 		registerPacket(PacketAAGunAngles.class);
 		registerPacket(PacketBaseEdit.class);
 		registerPacket(PacketBreakSound.class);
