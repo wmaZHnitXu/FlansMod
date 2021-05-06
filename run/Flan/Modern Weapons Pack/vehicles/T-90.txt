@@ -8,8 +8,8 @@ Texture SkinT90
 //Third Person Camera Distance
 CameraDistance 7.5
 //Throttle
-MaxThrottle 0.6
-MaxNegativeThrottle 0.4
+MaxThrottle 0
+MaxNegativeThrottle 0
 //Steering modifiers
 TurnLeftSpeed 0.3
 TurnRightSpeed 0.3
@@ -18,10 +18,10 @@ Drag 10.0
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.5
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -40 -10 -26
-WheelPosition 1 -40 -10 26
-WheelPosition 2 68 -10 26
-WheelPosition 3 68 -10 -26
+WheelPosition 0 22 -10 22
+WheelPosition 1 -22 -10 22
+WheelPosition 2 -22 -10 -22
+WheelPosition 3 22 -10 -22
 WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
@@ -39,7 +39,7 @@ Passengers 1
 Passenger 1 0 15 0 turret -360 360 -15 40 rpd PassengerGun1
 RotatedPassengerOffset 1 2 0 -14
 GunOrigin 1 -10 16 -12
-BarrelPosition 110 20 0
+BarrelPosition 0 40 0
 AddAmmo shell
 AddAmmo HEshell
 //Secondary gun
@@ -52,7 +52,7 @@ StartSound ChallengerIdle
 StartSoundLength 40
 EngineSound ChallengerRun
 EngineSoundLength 40
-ShootSoundPrimary 90mm
+ShootSoundPrimary RPDShoot
 ShootSoundSecondary RPDShoot
 TurretRotationSpeed 0.06
 DamageModifierPrimary 100

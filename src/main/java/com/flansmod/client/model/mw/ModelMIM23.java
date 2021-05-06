@@ -2,158 +2,171 @@ package com.flansmod.client.model.mw;
 
 import com.flansmod.client.model.ModelVehicle;
 import com.flansmod.client.tmt.ModelRendererTurbo;
+import com.flansmod.client.tmt.Coord2D;
+import com.flansmod.client.tmt.Shape2D;
 
 public class ModelMIM23 extends ModelVehicle
 {
 	public ModelMIM23()
 	{
-		int textureX = 256;
-		int textureY = 256;
+		int textureX = 512;
+		int textureY = 512;
 		
-		bodyModel = new ModelRendererTurbo[4];
-		
-		bodyModel[0] = new ModelRendererTurbo(this, 0, 0, textureX, textureY);    //Centrepiece
-		bodyModel[0].addBox(-24F, -4F, -8F, 48, 9, 16);
-		
-		bodyModel[1] = new ModelRendererTurbo(this, 0, 25, textureX, textureY);    //Track cover piece
-		bodyModel[1].addBox(-24F, 5F, -16F, 48, 1, 32);
-		
-		bodyModel[2] = new ModelRendererTurbo(this, 0, 58, textureX, textureY);    //Front mudflap
-		bodyModel[2].addBox(0F, -1F, -16F, 6, 1, 32);
-		bodyModel[2].setRotationPoint(24F, 6F, 0F);
-		bodyModel[2].rotateAngleZ = -(float)Math.PI / 4F;
-		
-		bodyModel[3] = new ModelRendererTurbo(this, 0, 58, textureX, textureY);    //Rear mudflap
-		bodyModel[3].addBox(0F, -1F, -16F, 6, 1, 32);
-		bodyModel[3].setRotationPoint(-24F, 6F, 0F);
-		bodyModel[3].rotateAngleZ = -(float)Math.PI / 4F;
-		bodyModel[3].rotateAngleY = (float)Math.PI;
-		
-		leftTrackModel = new ModelRendererTurbo[8];
-		
-		leftTrackModel[0] = new ModelRendererTurbo(this, 0, 94, textureX, textureY);    //Left track bottom
-		leftTrackModel[0].addBox(-23F, -8F, -16F, 46, 1, 8);
-		
-		leftTrackModel[1] = new ModelRendererTurbo(this, 0, 104, textureX, textureY);    //Left track top
-		leftTrackModel[1].addBox(-23F, 3F, -16F, 46, 1, 8);
-		
-		leftTrackModel[2] = new ModelRendererTurbo(this, 0, 114, textureX, textureY);    //Left track back
-		leftTrackModel[2].addBox(-23F, -7F, -16F, 1, 10, 8);
-		
-		leftTrackModel[3] = new ModelRendererTurbo(this, 20, 114, textureX, textureY);    //Left track front
-		leftTrackModel[3].addBox(22F, -7F, -16F, 1, 10, 8);
-		
-		leftTrackModel[4] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Left track wheel 1
-		leftTrackModel[4].addBox(-21.5F, -6.5F, -16F, 9, 9, 4);
-		
-		leftTrackModel[5] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Left track wheel 2
-		leftTrackModel[5].addBox(-10.5F, -6.5F, -16F, 9, 9, 4);
-		
-		leftTrackModel[6] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Left track wheel 3
-		leftTrackModel[6].addBox(1.5F, -6.5F, -16F, 9, 9, 4);
-		
-		leftTrackModel[7] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Left track wheel 4
-		leftTrackModel[7].addBox(12.5F, -6.5F, -16F, 9, 9, 4);
-		
-		rightTrackModel = new ModelRendererTurbo[8];
-		
-		rightTrackModel[0] = new ModelRendererTurbo(this, 0, 94, textureX, textureY);    //Right track bottom
-		rightTrackModel[0].addBox(-23F, -8F, -16F, 46, 1, 8);
-		rightTrackModel[0].rotateAngleY = (float)Math.PI;
-		
-		rightTrackModel[1] = new ModelRendererTurbo(this, 0, 104, textureX, textureY);    //Right track top
-		rightTrackModel[1].addBox(-23F, 3F, -16F, 46, 1, 8);
-		rightTrackModel[1].rotateAngleY = (float)Math.PI;
-		
-		rightTrackModel[2] = new ModelRendererTurbo(this, 0, 114, textureX, textureY);    //Right track back
-		rightTrackModel[2].addBox(-23F, -7F, -16F, 1, 10, 8);
-		rightTrackModel[2].rotateAngleY = (float)Math.PI;
-		
-		rightTrackModel[3] = new ModelRendererTurbo(this, 20, 114, textureX, textureY);    //Right track front
-		rightTrackModel[3].addBox(22F, -7F, -16F, 1, 10, 8);
-		rightTrackModel[3].rotateAngleY = (float)Math.PI;
-		
-		rightTrackModel[4] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Right track wheel 1
-		rightTrackModel[4].addBox(-21.5F, -6.5F, -16F, 9, 9, 4);
-		rightTrackModel[4].rotateAngleY = (float)Math.PI;
-		
-		rightTrackModel[5] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Right track wheel 2
-		rightTrackModel[5].addBox(-10.5F, -6.5F, -16F, 9, 9, 4);
-		rightTrackModel[5].rotateAngleY = (float)Math.PI;
-		
-		rightTrackModel[6] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Right track wheel 3
-		rightTrackModel[6].addBox(1.5F, -6.5F, -16F, 9, 9, 4);
-		rightTrackModel[6].rotateAngleY = (float)Math.PI;
-		
-		rightTrackModel[7] = new ModelRendererTurbo(this, 40, 114, textureX, textureY);    //Right track wheel 4
-		rightTrackModel[7].addBox(12.5F, -6.5F, -16F, 9, 9, 4);
-		rightTrackModel[7].rotateAngleY = (float)Math.PI;
-		
-		turretModel = new ModelRendererTurbo[7];
-		
-		turretModel[0] = new ModelRendererTurbo(this, 0, 134, textureX, textureY);    //Turret base
-		turretModel[0].addBox(-12F, 6F, -12F, 24, 2, 24);
-		
-		turretModel[1] = new ModelRendererTurbo(this, 0, 162, textureX, textureY);    //Seat back
-		turretModel[1].addBox(4F, 8F, -6F, 1, 16, 12);
-		
-		turretModel[2] = new ModelRendererTurbo(this, 28, 162, textureX, textureY);    //Seat footrest
-		turretModel[2].addBox(12F, 6F, -6F, 4, 2, 12);
-		
-		turretModel[3] = new ModelRendererTurbo(this, 0, 192, textureX, textureY);    //Supports for missile stand
-		turretModel[3].addShapeBox(-12F, 8F, -6F, 16, 16, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -8F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -8F, 0F, 0F);
-		
-		turretModel[4] = new ModelRendererTurbo(this, 0, 212, textureX, textureY);    //Supports for missile stand
-		turretModel[4].addBox(-4F, 24F, -6F, 8, 8, 2);
-		
-		turretModel[5] = new ModelRendererTurbo(this, 38, 192, textureX, textureY);    //Supports for missile stand
-		turretModel[5].addShapeBox(-12F, 8F, 4F, 16, 16, 2, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, 0F, /* 2 */ 0F, 0F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ -8F, 0F, 0F, /* 5 */ 0F, 0F, 0F, /* 6 */ 0F, 0F, 0F, /* 7 */ -8F, 0F, 0F);
-		
-		turretModel[6] = new ModelRendererTurbo(this, 38, 212, textureX, textureY);    //Supports for missile stand
-		turretModel[6].addBox(-4F, 24F, 4F, 8, 8, 2);
-		
+		bodyModel = new ModelRendererTurbo[10];
+		bodyModel[0] = new ModelRendererTurbo(this, 329, 75, textureX, textureY); // Box 0
+		bodyModel[1] = new ModelRendererTurbo(this, 65, 1, textureX, textureY); // Box 1
+		bodyModel[2] = new ModelRendererTurbo(this, 121, 1, textureX, textureY); // Box 3
+		bodyModel[3] = new ModelRendererTurbo(this, 383, 167, textureX, textureY); // Box 4
+		bodyModel[4] = new ModelRendererTurbo(this, 233, 1, textureX, textureY); // Box 5
+		bodyModel[5] = new ModelRendererTurbo(this, 289, 1, textureX, textureY); // Shape 6
+		bodyModel[6] = new ModelRendererTurbo(this, 313, 1, textureX, textureY); // Shape 7
+		bodyModel[7] = new ModelRendererTurbo(this, 410, 45, textureX, textureY); // Shape 8
+		bodyModel[8] = new ModelRendererTurbo(this, 361, 1, textureX, textureY); // Shape 9
+		bodyModel[9] = new ModelRendererTurbo(this, 385, 1, textureX, textureY); // Box 10
+
+		bodyModel[0].addBox(0F, 0F, 0F, 14, 3, 14, 0F); // Box 0
+		bodyModel[0].setRotationPoint(-7F, 7F, -7F);
+
+		bodyModel[1].addBox(0F, 0F, 0F, 12, 2, 12, 0F); // Box 1
+		bodyModel[1].setRotationPoint(-6F, 8F, 7F);
+
+		bodyModel[2].addBox(0F, 0F, 0F, 12, 2, 12, 0F); // Box 3
+		bodyModel[2].setRotationPoint(-6F, 8F, -19F);
+
+		bodyModel[3].addBox(0F, 0F, 0F, 12, 2, 12, 0F); // Box 4
+		bodyModel[3].setRotationPoint(7F, 8F, 6F);
+		bodyModel[3].rotateAngleY = -1.57079633F;
+
+		bodyModel[4].addBox(0F, 0F, 0F, 12, 2, 12, 0F); // Box 5
+		bodyModel[4].setRotationPoint(-19F, 8F, 6F);
+		bodyModel[4].rotateAngleY = -1.57079633F;
+
+		bodyModel[5].addShape3D(10F, 0F, -9F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(10, 0, 10, 0), new Coord2D(10, 2, 10, 2) }), 18, 10, 2, 23, 18, ModelRendererTurbo.MR_FRONT, new float[] {11 ,2 ,10}); // Shape 6
+		bodyModel[5].setRotationPoint(5F, 10.1F, -5F);
+		bodyModel[5].rotateAngleY = -0.78539816F;
+
+		bodyModel[6].addShape3D(10F, 0F, -9F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(10, 0, 10, 0), new Coord2D(10, 2, 10, 2) }), 18, 10, 2, 23, 18, ModelRendererTurbo.MR_FRONT, new float[] {11 ,2 ,10}); // Shape 7
+		bodyModel[6].setRotationPoint(-5F, 10.1F, 5F);
+		bodyModel[6].rotateAngleY = -3.92699082F;
+
+		bodyModel[7].addShape3D(10F, 0F, -9F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(10, 0, 10, 0), new Coord2D(10, 2, 10, 2) }), 18, 10, 2, 23, 18, ModelRendererTurbo.MR_FRONT, new float[] {11 ,2 ,10}); // Shape 8
+		bodyModel[7].setRotationPoint(5F, 10.1F, 5F);
+		bodyModel[7].rotateAngleY = 0.78539816F;
+
+		bodyModel[8].addShape3D(10F, 0F, -9F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(10, 0, 10, 0), new Coord2D(10, 2, 10, 2) }), 18, 10, 2, 23, 18, ModelRendererTurbo.MR_FRONT, new float[] {11 ,2 ,10}); // Shape 9
+		bodyModel[8].setRotationPoint(-5F, 10.1F, -5F);
+		bodyModel[8].rotateAngleY = -2.35619449F;
+
+		bodyModel[9].addBox(0F, 0F, 0F, 12, 4, 12, 0F); // Box 10
+		bodyModel[9].setRotationPoint(-6F, 3F, -6F);
+
+
+		turretModel = new ModelRendererTurbo[18];
+		turretModel[0] = new ModelRendererTurbo(this, 25, 17, textureX, textureY); // Box 12
+		turretModel[1] = new ModelRendererTurbo(this, 417, 1, textureX, textureY); // Box 13
+		turretModel[2] = new ModelRendererTurbo(this, 145, 17, textureX, textureY); // Shape 14
+		turretModel[3] = new ModelRendererTurbo(this, 169, 17, textureX, textureY); // Box 15
+		turretModel[4] = new ModelRendererTurbo(this, 227, 178, textureX, textureY); // Shape 16
+		turretModel[5] = new ModelRendererTurbo(this, 76, 171, textureX, textureY); // Shape 17
+		turretModel[6] = new ModelRendererTurbo(this, 164, 129, textureX, textureY); // Shape 18
+		turretModel[7] = new ModelRendererTurbo(this, 337, 122, textureX, textureY); // Shape 19
+		turretModel[8] = new ModelRendererTurbo(this, 296, 182, textureX, textureY); // Box 18
+		turretModel[9] = new ModelRendererTurbo(this, 115, 77, textureX, textureY); // Box 19
+		turretModel[10] = new ModelRendererTurbo(this, 82, 115, textureX, textureY); // Box 24
+		turretModel[11] = new ModelRendererTurbo(this, 256, 129, textureX, textureY); // Shape 25
+		turretModel[12] = new ModelRendererTurbo(this, 160, 174, textureX, textureY); // Shape 26
+		turretModel[13] = new ModelRendererTurbo(this, 19, 173, textureX, textureY); // Shape 27
+		turretModel[14] = new ModelRendererTurbo(this, 64, 76, textureX, textureY); // Box 28
+		turretModel[15] = new ModelRendererTurbo(this, 0, 0, textureX, textureY); // Box 29
+		turretModel[16] = new ModelRendererTurbo(this, 18, 131, textureX, textureY); // Box 30
+		turretModel[17] = new ModelRendererTurbo(this, 11, 81, textureX, textureY); // Box 31
+
+		turretModel[0].addBox(0F, 0F, 0F, 23, 1, 33, 0F); // Box 12
+		turretModel[0].setRotationPoint(-16F, 2F, -9F);
+
+		turretModel[1].addBox(0F, 0F, 0F, 26, 6, 17, 0F); // Box 13
+		turretModel[1].setRotationPoint(-19F, -4F, -9F);
+
+		turretModel[2].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(3, 0, 3, 0), new Coord2D(3, 6, 3, 6) }), 33, 3, 6, 16, 33, ModelRendererTurbo.MR_FRONT, new float[] {7 ,6 ,3}); // Shape 14
+		turretModel[2].setRotationPoint(10F, -4F, -9F);
+		turretModel[2].rotateAngleX = 3.14159265F;
+
+		turretModel[3].addBox(0F, 0F, 0F, 22, 11, 17, 0F); // Box 15
+		turretModel[3].setRotationPoint(-28F, -15F, -9F);
+
+		turretModel[4].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(16, 0, 16, 0), new Coord2D(16, 11, 16, 11) }), 3, 16, 11, 47, 3, ModelRendererTurbo.MR_FRONT, new float[] {20 ,11 ,16}); // Shape 16
+		turretModel[4].setRotationPoint(10F, -4F, 8F);
+
+		turretModel[5].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(16, 0, 16, 0), new Coord2D(16, 11, 16, 11) }), 3, 16, 11, 47, 3, ModelRendererTurbo.MR_FRONT, new float[] {20 ,11 ,16}); // Shape 17
+		turretModel[5].setRotationPoint(10F, -4F, -6F);
+
+		turretModel[6].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(16, 0, 16, 0), new Coord2D(16, 11, 16, 11) }), 3, 16, 11, 47, 3, ModelRendererTurbo.MR_FRONT, new float[] {20 ,11 ,16}); // Shape 18
+		turretModel[6].setRotationPoint(10F, -4F, 1F);
+
+		turretModel[7].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(6, 0, 6, 0), new Coord2D(6, 9, 6, 9) }), 17, 6, 9, 26, 17, ModelRendererTurbo.MR_FRONT, new float[] {11 ,9 ,6}); // Shape 19
+		turretModel[7].setRotationPoint(-19F, 2F, -9F);
+		turretModel[7].rotateAngleX = 3.14159265F;
+		turretModel[7].rotateAngleZ = 4.71238898F;
+
+		turretModel[8].addBox(0F, 0F, 0F, 12, 4, 5, 0F); // Box 18
+		turretModel[8].setRotationPoint(-28F, -15F, -14F);
+
+		turretModel[9].addBox(0F, 0F, 0F, 18, 2, 12, 0F); // Box 19
+		turretModel[9].setRotationPoint(-28F, -17F, -9F);
+
+		turretModel[10].addBox(0F, 0F, 0F, 7, 6, 16, 0F); // Box 24
+		turretModel[10].setRotationPoint(0F, -4F, 8F);
+
+		turretModel[11].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(7, 0, 7, 0), new Coord2D(7, 5, 7, 5) }), 16, 7, 5, 21, 16, ModelRendererTurbo.MR_FRONT, new float[] {9 ,5 ,7}); // Shape 25
+		turretModel[11].setRotationPoint(10F, -4F, 24F);
+
+		turretModel[12].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(7, 0, 7, 0), new Coord2D(7, 5, 7, 5) }), 11, 7, 5, 21, 11, ModelRendererTurbo.MR_FRONT, new float[] {9 ,5 ,7}); // Shape 26
+		turretModel[12].setRotationPoint(1F, -10F, -9F);
+		turretModel[12].rotateAngleX = 1.57079633F;
+
+		turretModel[13].addShape3D(0F, 0F, 0F, new Shape2D(new Coord2D[] { new Coord2D(0, 0, 0, 0), new Coord2D(7, 0, 7, 0), new Coord2D(7, 5, 7, 5) }), 11, 7, 5, 21, 11, ModelRendererTurbo.MR_FRONT, new float[] {9 ,5 ,7}); // Shape 27
+		turretModel[13].setRotationPoint(-13F, 1F, -9F);
+		turretModel[13].rotateAngleX = 1.57079633F;
+		turretModel[13].rotateAngleZ = 3.14159265F;
+
+		turretModel[14].addBox(0F, 0F, 0F, 1, 6, 11, 0F); // Box 28
+		turretModel[14].setRotationPoint(2F, -11F, 10F);
+		turretModel[14].rotateAngleZ = -0.17453293F;
+
+		turretModel[15].addBox(0F, 0F, 0F, 2, 2, 5, 0F); // Box 29
+		turretModel[15].setRotationPoint(1.5F, -6F, 13F);
+
+		turretModel[16].addBox(0F, 0F, 0F, 10, 2, 10, 0F); // Box 30
+		turretModel[16].setRotationPoint(-16F, 0F, 11F);
+
+		turretModel[17].addBox(0F, 0F, 0F, 2, 16, 10, 0F); // Box 31
+		turretModel[17].setRotationPoint(-19F, -15.5F, 11F);
+		turretModel[17].rotateAngleZ = 0.08726646F;
+
+
 		barrelModel = new ModelRendererTurbo[4];
-		
-		barrelModel[0] = new ModelRendererTurbo(this, 0, 224, textureX, textureY);    //Missile centre piece
-		barrelModel[0].addBox(-12F, -4F, -4F, 24, 8, 8);
-		barrelModel[0].setRotationPoint(0F, 32F, 0F);
-		
-		barrelModel[1] = new ModelRendererTurbo(this, 0, 242, textureX, textureY);    //Missile attachment rail
-		barrelModel[1].addBox(-6F, 4F, -1F, 12, 8, 2);
-		barrelModel[1].setRotationPoint(0F, 32F, 0F);
-		
-		barrelModel[2] = new ModelRendererTurbo(this, 30, 242, textureX, textureY);    //Missile attachment rail
-		barrelModel[2].addBox(-6F, -1F, -12F, 12, 2, 8);
-		barrelModel[2].setRotationPoint(0F, 32F, 0F);
-		
-		barrelModel[3] = new ModelRendererTurbo(this, 30, 242, textureX, textureY);    //Missile attachment rail
-		barrelModel[3].addBox(-6F, -1F, 4F, 12, 2, 8);
-		barrelModel[3].setRotationPoint(0F, 32F, 0F);
-		
-		ammoModel = new ModelRendererTurbo[3][4];
-		
-		for(int i = 0; i < 3; i++)
-		{
-			float yOffset = i == 1 ? 12F : 0F;
-			
-			ammoModel[i] = new ModelRendererTurbo[4];
-			
-			ammoModel[i][0] = new ModelRendererTurbo(this, 72, 212, textureX, textureY);
-			ammoModel[i][0].addBox(-20F, -3F + yOffset, -3F + i * 12F - 12F, 40, 6, 6);
-			
-			ammoModel[i][1] = new ModelRendererTurbo(this, 72, 226, textureX, textureY);
-			ammoModel[i][1].addTrapezoid(20F, -3F + yOffset, -3F + i * 12F - 12F, 8, 6, 6, 0F, -3F, ModelRendererTurbo.MR_LEFT);
-			
-			ammoModel[i][2] = new ModelRendererTurbo(this, 102, 226, textureX, textureY);
-			ammoModel[i][2].addShapeBox(-20F, -7F + yOffset, 0F + i * 12F - 12F, 20, 14, 0, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, -4F, 0F, /* 2 */ 0F, -4F, 0F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, -4F, 0F, /* 6 */ 0F, -4F, 0F, /* 7 */ 0F, 0F, 0F);
-			
-			ammoModel[i][3] = new ModelRendererTurbo(this, 88, 242, textureX, textureY);
-			ammoModel[i][3].addShapeBox(-20F, 0F + yOffset, -7F + i * 12F - 12F, 20, 0, 14, 0F, /* 0 */ 0F, 0F, 0F, /* 1 */ 0F, 0F, -4F, /* 2 */ 0F, 0F, -4F, /* 3 */ 0F, 0F, 0F, /* 4 */ 0F, 0F, 0F, /* 5 */ 0F, 0F, -4F, /* 6 */ 0F, 0F, -4F, /* 7 */ 0F, 0F, 0F);
-			
-			for(int j = 0; j < 4; j++)
-			{
-				ammoModel[i][j].setRotationPoint(0F, 32F, 0F);
-			}
-		}
+		barrelModel[0] = new ModelRendererTurbo(this, 93, 243, textureX, textureY); // Box 20
+		barrelModel[1] = new ModelRendererTurbo(this, 92, 222, textureX, textureY); // Box 21
+		barrelModel[2] = new ModelRendererTurbo(this, 28, 219, textureX, textureY); // Box 22
+		barrelModel[3] = new ModelRendererTurbo(this, 219, 78, textureX, textureY); // Box 23
+
+		barrelModel[0].addBox(0F, 0F, 0F, 47, 2, 2, 0F); // Box 20
+		barrelModel[0].setRotationPoint(-7F, -10F, 2F);
+
+		barrelModel[1].addBox(0F, 0F, 0F, 47, 2, 2, 0F); // Box 21
+		barrelModel[1].setRotationPoint(-7F, -10F, -5F);
+
+		barrelModel[2].addBox(47F, 0F, 0F, 15, 3, 3, 0F); // Box 22
+		barrelModel[2].setRotationPoint(-7F, -10.5F, -5.5F);
+
+		barrelModel[3].addBox(47F, 0F, 0F, 15, 3, 3, 0F); // Box 23
+		barrelModel[3].setRotationPoint(-7F, -10.5F, 1.5F);
+
+
+
+		translateAll(0F, 0F, 0F);
+
+
+		flipAll();
 	}
 }

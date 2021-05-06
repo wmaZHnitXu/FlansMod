@@ -370,7 +370,7 @@ public class TmtTessellator extends Tessellator
 	private void reset()
 	{
 		this.vertexCount = 0;
-		TmtTessellator.byteBuffer.clear();
+		if (TmtTessellator.byteBuffer != null) TmtTessellator.byteBuffer.clear();
 		this.rawBufferIndex = 0;
 		this.addedVertices = 0;
 	}

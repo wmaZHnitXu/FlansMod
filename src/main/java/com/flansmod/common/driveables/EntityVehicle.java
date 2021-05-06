@@ -1,18 +1,24 @@
 package com.flansmod.common.driveables;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import scala.collection.generic.BitOperations.Int;
 
 import com.flansmod.api.IExplodeable;
 import com.flansmod.client.model.AnimTankTrack;
@@ -24,6 +30,7 @@ import com.flansmod.common.network.PacketVehicleControl;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.tools.ItemTool;
 import com.flansmod.common.vector.Vector3f;
+import ic2.core.block.wiring.TileEntityChargepadCESU;
 
 
 public class EntityVehicle extends EntityDriveable implements IExplodeable
@@ -165,6 +172,7 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		super.setPositionRotationAndMotion(x, y, z, yaw, pitch, roll, motX, motY, motZ, velYaw, velPitch, velRoll,
 			throttle, steeringYaw);
 		wheelsYaw = steeringYaw;
+		cesu = (TileEntityChargepadCESU)GetEnergyStorageTile(); //ANET
 	}
 	
 	@Override
@@ -179,7 +187,6 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 		ItemStack currentItem = entityplayer.getHeldItemMainhand();
 		if(currentItem.getItem() instanceof ItemTool && ((ItemTool)currentItem.getItem()).type.healDriveables)
 			return true;
-		
 		VehicleType type = getVehicleType();
 		//Check each seat in order to see if the player can sit in it
 		for(int i = 0; i <= type.numPassengers; i++)
@@ -656,7 +663,52 @@ public class EntityVehicle extends EntityDriveable implements IExplodeable
 			trackLinksRight[i].zRot = Lerp(trackLinksRight[i].zRot, newAngle, (part != (funkypart + funk2)) ? 0.5F : 1);
 		}
 	}
-	
+	private TileEntityChargepadCESU cesu; //ANET
+
+	private TileEntity GetEnergyStorageTile () { //ANET
+		FlansMod.log.error("checkSTORAGE");
+		BlockPos pos = this.getPosition().down(2);
+		FlansMod.log.error(pos.toString());
+		IBlockState state = (world.getBlockState(pos));
+		FlansMod.log.error(Block.getStateId(state));
+		if (Block.getStateId(state) == 4349) {
+			FlansMod.log.error("dataIsFine");
+			TileEntity storage = world.getTileEntity(pos);
+			FlansMod.log.error(storage.getDisplayName());
+			return storage;
+		}
+		return null;
+	}
+
+	@Override
+	public boolean hasFuel () {  //ANET
+		return driveableData.fuelInTank >= getDriveableType().fuelTankSize;
+	}
+	@Override
+	public void consumeEnergy () { //ANET
+		if (cesu == null) return;
+		DriveableData data = getDriveableData();
+		DriveableType type = getDriveableType();
+		float shootConsumption = type.fuelTankSize; 
+		if (cesu.getStored() < shootConsumption) return;
+		int energy = -(int)(cesu.getOutputEnergyUnitsPerTick());
+		cesu.addEnergy(energy);
+		if (data.fuelInTank - energy < type.fuelTankSize)
+			data.fuelInTank -= energy;
+		else
+			data.fuelInTank = type.fuelTankSize;
+		FlansMod.log.error(data.fuelInTank + "/" + type.fuelTankSize);
+	}
+	@Override
+	protected void shootEach (DriveableType type, ShootPoint shootPoint, int currentGun, boolean secondary,EnumWeaponType weaponType) {
+		super.shootEach(type, shootPoint, currentGun, secondary, weaponType);
+		consumeFuelToShoot();
+	}
+	protected void consumeFuelToShoot () {
+		DriveableData data = getDriveableData();
+		data.fuelInTank = 0;
+	}
+
 	public float rotateTowards(Vector3f point, Vector3f original)
 	{
 		

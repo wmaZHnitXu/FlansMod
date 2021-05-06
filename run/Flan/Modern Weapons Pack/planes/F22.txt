@@ -6,13 +6,14 @@ Icon F22
 Model mw.F22
 Texture SkinF22
 //Third Person Camera Distance
-CameraDistance 15.0
+CameraDistance 300.0
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
 RestingPitch 5.0
 HasGear True
+HasDoor True
 // ------------------------------------------------------ Movement ------------------------------------------------------
 //Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
-Mode Plane
+Mode VTOL
 //Throttle
 MaxThrottle 8.0
 MaxNegativeThrottle 0.0
@@ -31,19 +32,20 @@ Drag 1.0
 //Lift 2.5
 //Wheels
 NumWheels 3
-WheelPosition 0 -47 -10 -32
-WheelPosition 1 -47 -10 32
-WheelPosition 2 75 -10 0
+WheelPosition 0 -61 -22 -15
+WheelPosition 1 -61 -22 16
+WheelPosition 2 22 -22 1
 WheelSpringStrength 0.125
 //Propeller <ID> <x> <y> <z> <planePart> <recipeItem>
 Propeller 0 54 0 0 core metalPropeller
+HeliPropeller 0 54 0 0 core metalPropeller
 // ------------------------------------------------------ Weaponry ------------------------------------------------------
 //Weapon types. Options are Missile, Bomb, Gun, Shell, None
 Primary Gun
 Secondary Missile
 //Time between shots in 1/20ths of seconds
 ShootDelayPrimary 2
-ShootDelaySecondary 20
+ShootDelaySecondary 10
 //Whether to alternate or fire all together
 AlternatePrimary False
 AlternateSecondary False
@@ -63,7 +65,7 @@ AddAmmo mk4Rocket
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 6000
 // ------------------------------------------------------ Passengers ------------------------------------------------------
-Pilot 103 31 0
+Pilot -5 -3 0
 Passengers 0
 // ------------------------------------------------------ Sounds ------------------------------------------------------
 StartSound JetIdle

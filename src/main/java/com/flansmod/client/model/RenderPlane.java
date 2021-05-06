@@ -178,8 +178,46 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 	
 	@Override
 	public void doRender(EntityPlane entity, double d, double d1, double d2, float f, float f1)
-	{
-		//The plane is rendered by the renderWorld Method
+	{   /*
+		bindEntityTexture(entity);
+		float scale = 1F / 16F;
+		PlaneType type = entity.getPlaneType();
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float)d, (float)d1, (float)d2);
+		float dYaw = (entity.axes.getYaw() - entity.prevRotationYaw);
+		for(; dYaw > 180F; dYaw -= 360F)
+		{
+		}
+		for(; dYaw <= -180F; dYaw += 360F)
+		{
+		}
+		float dPitch = (entity.axes.getPitch() - entity.prevRotationPitch);
+		for(; dPitch > 180F; dPitch -= 360F)
+		{
+		}
+		for(; dPitch <= -180F; dPitch += 360F)
+		{
+		}
+		float dRoll = (entity.axes.getRoll() - entity.prevRotationRoll);
+		GlStateManager.rotate(-entity.prevRotationYaw - dYaw * f1, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(entity.prevRotationPitch + dPitch * f1, 0.0F, 0.0F, 1.0F);
+		GlStateManager.rotate(entity.prevRotationRoll + dRoll * f1, 1.0F, 0.0F, 0.0F);
+		float modelScale = entity.getPlaneType().modelScale;
+		ModelPlane model = (ModelPlane)type.model;
+		
+		//Body Render
+		{
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(modelScale, modelScale, modelScale);
+			if(model != null)
+				model.render(entity, f1);
+			
+			//Render hips slot : jetpack item
+			
+			GlStateManager.popMatrix();
+		}
+		*/
+		render((EntityPlane)entity, d, d1, d2, f, f1);
 	}
 	
 	@Override
@@ -192,7 +230,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent event)
-	{
+	{	/*
 		//Get the world
 		World world = Minecraft.getMinecraft().world;
 		if(world == null)
@@ -210,12 +248,12 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		//Push
 		GlStateManager.pushMatrix();
 		//Setup lighting
-		Minecraft.getMinecraft().entityRenderer.enableLightmap();
+		//Minecraft.getMinecraft().entityRenderer.enableLightmap(); TODO
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.enableLighting();
-		GlStateManager.disableBlend();
+		//GlStateManager.enableLighting(); TODO
+		//GlStateManager.disableBlend(); TODO
 		
-		RenderHelper.enableStandardItemLighting();
+		//RenderHelper.enableStandardItemLighting(); TODO
 		
 		GlStateManager.translate(-x, -y, -z);
 		for(Object entity : world.loadedEntityList)
@@ -232,7 +270,7 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 				
 				int j = i % 65536;
 				int k = i / 65536;
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+				//OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F); TODO
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				render(plane,
 						plane.prevPosX + (plane.posX - plane.prevPosX) * event.getPartialTicks(),
@@ -244,11 +282,12 @@ public class RenderPlane extends Render<EntityPlane> implements CustomItemRender
 		}
 		
 		//Reset Lighting
-		Minecraft.getMinecraft().entityRenderer.disableLightmap();
+		//Minecraft.getMinecraft().entityRenderer.disableLightmap(); TODO
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		GlStateManager.disableLighting();
+		//GlStateManager.disableLighting(); TODO
 		//Pop
 		GlStateManager.popMatrix();
+		*/
 	}
 	
 	@Override

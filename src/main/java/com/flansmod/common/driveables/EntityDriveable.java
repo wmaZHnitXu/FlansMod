@@ -557,8 +557,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void shoot(boolean secondary)
 	{
 		DriveableType type = getDriveableType();
-		if(seats[0] == null || !(seats[0].getControllingPassenger() instanceof EntityLivingBase))
+		if(seats[0] == null || !(seats[0].getControllingPassenger() instanceof EntityLivingBase) || !hasFuel()) {
+			FlansMod.log.error("nofuel");
 			return;
+		}//ANET
+		FlansMod.log.error("STRELYAEM");
 		// Check shoot delay
 		while(getShootDelay(secondary) <= 0.0f)
 		{
@@ -604,9 +607,14 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 	}
 	
-	private void shootEach(DriveableType type, ShootPoint shootPoint, int currentGun, boolean secondary,
+	protected void shootEach(DriveableType type, ShootPoint shootPoint, int currentGun, boolean secondary,
 						   EnumWeaponType weaponType)
 	{
+		if (!hasFuel()) {
+			FlansMod.log.error("DONTHAVEDAFUEL");
+			return;
+		}
+		FlansMod.log.error("HAVEDAFUEL");
 		// Rotate the gun vector to global axes
 		Vector3f gunVec = getOrigin(shootPoint);
 		Vector3f lookVector = getLookVector(shootPoint);
@@ -765,6 +773,7 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	
 	public Vector3f getOrigin(ShootPoint shootPoint)
 	{
+		FlansMod.log.error("GlobalRotatin");
 		DriveablePosition driveablePosition = shootPoint.rootPos;
 		// Rotate the gun vector to global axes
 		Vector3f localGunVec = new Vector3f(driveablePosition.position);
@@ -841,7 +850,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 	public void onUpdate()
 	{
 		super.onUpdate();
-		
 		DriveableType type = getDriveableType();
 		
 		// Do a full check of our passengers for wheels or seats
@@ -1106,11 +1114,11 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 							pos = axes.findLocalVectorGlobally(localPosition);
 							velocity = axes.findLocalVectorGlobally(emitter.velocity);
 						}
-						else if(EnumDriveablePart.getPart(
+						else if((EnumDriveablePart.getPart(
 							emitter.part) == EnumDriveablePart.turret || EnumDriveablePart.getPart(
-							emitter.part) != EnumDriveablePart.head)
+							emitter.part) != EnumDriveablePart.head) && hasFuel()) //ANET
 						{
-							
+							FlansMod.log.error("rotatin");
 							Vector3f localPosition2 = new Vector3f(
 								emitter.origin.x + rand.nextFloat() * emitter.extents.x - emitter.extents.x * 0.5f,
 								emitter.origin.y + rand.nextFloat() * emitter.extents.y - emitter.extents.y * 0.5f,
@@ -1131,7 +1139,6 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		}
 		
 		checkParts();
-		
 		prevRotationYaw = axes.getYaw();
 		prevRotationPitch = axes.getPitch();
 		prevRotationRoll = axes.getRoll();
@@ -1190,61 +1197,66 @@ public abstract class EntityDriveable extends Entity implements IControllable, I
 		// The tank is currently full, so do nothing
 		if(getDriveableData().fuelInTank >= type.fuelTankSize)
 			return;
-		
-		// Look through the entire inventory for fuel cans, buildcraft fuel buckets and RedstoneFlux power sources
-		for(int i = 0; i < getDriveableData().getSizeInventory(); i++)
-		{
-			ItemStack stack = getDriveableData().getStackInSlot(i);
-			if(stack == null || stack.isEmpty())
-				continue;
-			Item item = stack.getItem();
-			// Check for Flan's Mod fuel items
-			if(item instanceof ItemPart)
+		if	(!(this instanceof EntityVehicle)) { //ANET
+			// Look through the entire inventory for fuel cans, buildcraft fuel buckets and RedstoneFlux power sources
+			for(int i = 0; i < getDriveableData().getSizeInventory(); i++)
 			{
-				PartType part = ((ItemPart)item).type;
-				// Check it is a fuel item
-				if(part.category == EnumPartCategory.FUEL)
+				ItemStack stack = getDriveableData().getStackInSlot(i);
+				if(stack == null || stack.isEmpty())
+					continue;
+				Item item = stack.getItem();
+				// Check for Flan's Mod fuel items
+				if(item instanceof ItemPart)
 				{
-					// Put 2 points of fuel
-					getDriveableData().fuelInTank += fuelMultiplier;
-					
-					// Damage the fuel item to indicate being used up
-					int damage = stack.getItemDamage();
-					stack.setItemDamage(damage + 1);
-					
-					// If we have finished this fuel item
-					if(damage >= stack.getMaxDamage())
+					PartType part = ((ItemPart)item).type;
+					// Check it is a fuel item
+					if(part.category == EnumPartCategory.FUEL)
 					{
-						// Reset the damage to 0
-						stack.setItemDamage(0);
-						// Consume one item
-						stack.setCount(stack.getCount() - 1);
-						// If we consumed the last one, destroy the stack
-						if(stack.getCount() <= 0)
-							getDriveableData().setInventorySlotContents(i, ItemStack.EMPTY.copy());
+						// Put 2 points of fuel
+						getDriveableData().fuelInTank += fuelMultiplier;
+						
+						// Damage the fuel item to indicate being used up
+						int damage = stack.getItemDamage();
+						stack.setItemDamage(damage + 1);
+						
+						// If we have finished this fuel item
+						if(damage >= stack.getMaxDamage())
+						{
+							// Reset the damage to 0
+							stack.setItemDamage(0);
+							// Consume one item
+							stack.setCount(stack.getCount() - 1);
+							// If we consumed the last one, destroy the stack
+							if(stack.getCount() <= 0)
+								getDriveableData().setInventorySlotContents(i, ItemStack.EMPTY.copy());
+						}
+						
+						// We found a fuel item and consumed some, so we are done
+						break;
 					}
 					
-					// We found a fuel item and consumed some, so we are done
-					break;
-				}
-				
-				// Check for Buildcraft oil and fuel buckets
-				else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(
-					FlansMod.hooks.BuildCraftOilBucket) &&
-					getDriveableData().fuelInTank + 1000 * fuelMultiplier <= type.fuelTankSize)
-				{
-					getDriveableData().fuelInTank += 1000 * fuelMultiplier;
-					getDriveableData().setInventorySlotContents(i, new ItemStack(Items.BUCKET));
-				}
-				else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(
-					FlansMod.hooks.BuildCraftFuelBucket) &&
-					getDriveableData().fuelInTank + 2000 * fuelMultiplier <= type.fuelTankSize)
-				{
-					getDriveableData().fuelInTank += 2000 * fuelMultiplier;
-					getDriveableData().setInventorySlotContents(i, new ItemStack(Items.BUCKET));
+					// Check for Buildcraft oil and fuel buckets
+					else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(
+						FlansMod.hooks.BuildCraftOilBucket) &&
+						getDriveableData().fuelInTank + 1000 * fuelMultiplier <= type.fuelTankSize)
+					{
+						getDriveableData().fuelInTank += 1000 * fuelMultiplier;
+						getDriveableData().setInventorySlotContents(i, new ItemStack(Items.BUCKET));
+					}
+					else if(FlansMod.hooks.BuildCraftLoaded && stack.isItemEqual(
+						FlansMod.hooks.BuildCraftFuelBucket) &&
+						getDriveableData().fuelInTank + 2000 * fuelMultiplier <= type.fuelTankSize)
+					{
+						getDriveableData().fuelInTank += 2000 * fuelMultiplier;
+						getDriveableData().setInventorySlotContents(i, new ItemStack(Items.BUCKET));
+					}
 				}
 			}
-		}
+		} 
+		else consumeEnergy(); //ANET
+	}
+	public void consumeEnergy () {
+
 	}
 	
 	public void tryRecoil()

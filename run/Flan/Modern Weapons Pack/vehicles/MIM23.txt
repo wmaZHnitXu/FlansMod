@@ -17,10 +17,10 @@ TurnRightSpeed 0
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -24 -8 -16
-WheelPosition 1 -24 -8 16
-WheelPosition 2 24 -8 16
-WheelPosition 3 24 -8 -16
+WheelPosition 0 20 -10 -20
+WheelPosition 1 20 -10 20
+WheelPosition 2 -20 -10 20
+WheelPosition 3 -20 -10 -20
 WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
@@ -28,10 +28,10 @@ FourWheelDrive true
 Tank true
 // ------------------------------------------------------ Weaponry ------------------------------------------------------
 //Weapon types. Options are Missile, Bomb, Gun, Shell, None
-Primary Missile
+Primary Gun
 Secondary None
 //Time between shots in 1/20ths of seconds
-ShootDelayPrimary 20
+ShootDelayPrimary 1
 ShootDelaySecondary 0
 //Whether to alternate or fire all together
 AlternatePrimary True
@@ -40,9 +40,8 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-ShootPointPrimary 0 32 -12 turret
-ShootPointPrimary 0 44 0 turret
-ShootPointPrimary 0 32 12 turret
+ShootPointPrimary -57.5 9.5 -3.5 turret rpd
+ShootPointPrimary -57.5 9.5 4.5 turret rpd
 TurretOrigin 0 32 0
 TurretRotationSpeed 0.06
 // ------------------------------------------------------ Inventory ------------------------------------------------------
@@ -50,19 +49,19 @@ CargoSlots 0
 BombSlots 0
 MissileSlots 3
 AllowAllAmmo False
-AddAmmo mim23Ammo
+AddAmmo RPDAmmo
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
-FuelTankSize 2000
+FuelTankSize 100
 // ------------------------------------------------------ Passengers ------------------------------------------------------
-Driver 0 6 0 -360 360 0 75
-RotatedDriverOffset 8 0 0
+Driver 0 -1 0 -360 360 -15 75
+RotatedDriverOffset -13 0 -18
 Passengers 0
 // ------------------------------------------------------ Sounds ------------------------------------------------------
 StartSound Engine
 StartSoundLength 20
 EngineSound Engine
 EngineSoundLength 20
-ShootSoundPrimary RocketFire2
+ShootSoundPrimary RPDShoot
 // ------------------------------------------------------ Recipe ------------------------------------------------------
 //Each section of the plane may have many parts
 //The sections are tailWheel, tail, bay, topWing, leftWingWheel, leftWing, rightWingWheel,

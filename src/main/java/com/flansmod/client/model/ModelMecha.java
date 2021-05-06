@@ -84,7 +84,7 @@ public class ModelMecha extends ModelDriveable
 		
 		if(mecha.isPartIntact(EnumDriveablePart.head))
 			for(ModelRendererTurbo model : headModel)
-				model.render(f5);
+				model.render(f5); //F5 = 0
 		
 		float pitch = mecha.getSeat(0) == null ? 0F : mecha.getSeat(0).looking.getPitch();
 		

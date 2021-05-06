@@ -30,6 +30,7 @@ compileJava {
 dependencies {
     compile "io.vavr:vavr:0.10.2"
     shadow "io.vavr:vavr:0.10.2"
+    compile files('industrialcraft-2-2.8.221-ex112-dev.jar')
 }
 
 minecraft {

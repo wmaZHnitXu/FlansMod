@@ -46,7 +46,7 @@ public class ModelAAGun extends ModelBase
 				barrelModel[i][j].render(f5);
 			}
 		}
-		
+		/*
 		for(int i = 0; i < ammoModel.length; i++)
 		{
 			if(aa.ammo[i] != null)
@@ -59,6 +59,7 @@ public class ModelAAGun extends ModelBase
 				}
 			}
 		}
+		*/ //TODO NAXNADO NEPONYATNO vsm nekrasivo je
 	}
 	
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)

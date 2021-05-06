@@ -58,12 +58,16 @@ public class TexturedPolygon
 	public void draw(TmtTessellator tessellator, float f)
 	{
 		
-		if(nVertices == 3)
+		if(nVertices == 3) {
 			tessellator.startDrawing(GL11.GL_TRIANGLES);
-		else if(nVertices == 4)
-			tessellator.startDrawingQuads();
-		else
-			tessellator.startDrawing(GL11.GL_POLYGON);
+		}
+		else {
+			if (nVertices == 4)
+				tessellator.startDrawingQuads();
+
+			else
+				tessellator.startDrawing(GL11.GL_POLYGON);
+		}
 		
 		if(iNormals.isEmpty())
 		{

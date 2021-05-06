@@ -282,8 +282,9 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 	@Override
 	public void doRender(EntityVehicle entity, double d, double d1, double d2, float f, float f1)
 	{
-		//render((EntityVehicle)entity, d, d1, d2, f, f1);
+		render((EntityVehicle)entity, d, d1, d2, f, f1);
 		//The Vehicle is rendered by the renderWorld Method
+		//NET
 	}
 	
 	@Override
@@ -358,6 +359,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent event)
 	{
+		/*
 		//Get the world
 		World world = Minecraft.getMinecraft().world;
 		if(world == null)
@@ -415,6 +417,7 @@ public class RenderVehicle extends Render<EntityVehicle> implements CustomItemRe
 		GlStateManager.disableLighting();
 		//Pop
 		GlStateManager.popMatrix();
+		*/
 	}
 	
 	public static class Factory implements IRenderFactory<EntityVehicle>

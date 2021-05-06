@@ -33,6 +33,7 @@ import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.teams.Team;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.vector.Vector3f;
+import com.flansmod.common.driveables.EntityDriveable; //ANET
 
 public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 {
@@ -59,7 +60,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public float barrelRecoil[];
 	public AAGunType type;
 	public Entity towedByEntity;
-	public ItemStack[] ammo; // One per barrel
+	public ItemStack ammo; // One per barrel
 	public int reloadTimer;
 	public int currentBarrel; // For cycling through firing each barrel
 	public boolean mouseHeld;
@@ -134,11 +135,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		health = type.health;
 		barrelRecoil = new float[type.numBarrels];
-		ammo = new ItemStack[type.numBarrels];
-		for(int i = 0; i < type.numBarrels; i++)
-		{
-			ammo[i] = ItemStack.EMPTY.copy();
-		}
+		ammo = ItemStack.EMPTY.copy();
 	}
 	
 	@Override
@@ -234,10 +231,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public void onUpdate()
 	{
 		super.onUpdate();
-		
 		prevGunYaw = gunYaw;
 		prevGunPitch = gunPitch;
-		
 		ticksSinceUsed++;
 		if(TeamsManager.aaLife > 0 && ticksSinceUsed > TeamsManager.aaLife * 20)
 		{
@@ -246,9 +241,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		
 		if(getControllingPassenger() != null)
 		{
-			ticksSinceUsed = 0;
-			gunYaw = getControllingPassenger().rotationYaw - 90;
-			gunPitch = getControllingPassenger().rotationPitch;
+				ticksSinceUsed = 0;
+				gunYaw = getControllingPassenger().rotationYaw - 90;
+				gunPitch = getControllingPassenger().rotationPitch;
 		}
 		
 		if(gunPitch > type.bottomViewLimit)
@@ -263,7 +258,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			shootDelay--;
 		
 		// Sentry stuff
-		if(isSentry())
+		if(true)
 		{
 			if(target != null && target.isDead)
 				target = null;
@@ -299,7 +294,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		
 		if(!onGround && !world.isRemote)
 			motionY -= 9.8D / 400D;
-		
 		// update motion
 		motionX *= 0.5;
 		motionZ *= 0.5;
@@ -337,37 +331,35 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			removePassengers();
 		}
-		
 		// Decrement the reload timer and reload
 		if(reloadTimer > 0)
 			reloadTimer--;
 			//If it is 0 or less, go ahead and reload
 		else
 		{
-			for(int i = 0; i < type.numBarrels; i++)
+			if(ammo != null && !ammo.isEmpty() && ammo.getItemDamage() == ammo.getMaxDamage())
 			{
-				if(ammo[i] != null && !ammo[i].isEmpty() && ammo[i].getItemDamage() == ammo[i].getMaxDamage())
+				ammo = ItemStack.EMPTY.copy();
+				// Scrap metal output? - NIET!
+			}
+			//ETO pOXODY DLIA TRANSPORTA, NETOOOOOOOO
+			if((ammo == null || ammo.isEmpty()) && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer)
+			{
+				int slot = findAmmo(((EntityPlayer)getControllingPassenger()));
+				if(slot >= 0)
 				{
-					ammo[i] = ItemStack.EMPTY.copy();
-					// Scrap metal output?
-				}
-				if((ammo[i] == null || ammo[i].isEmpty()) && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer)
-				{
-					int slot = findAmmo(((EntityPlayer)getControllingPassenger()));
-					if(slot >= 0)
-					{
-						ammo[i] = ((EntityPlayer)getControllingPassenger()).inventory.getStackInSlot(slot);
-						if(!((EntityPlayer)getControllingPassenger()).capabilities.isCreativeMode)
-							((EntityPlayer)getControllingPassenger()).inventory.decrStackSize(slot, 1);
-						reloadTimer = type.reloadTime;
-						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.reloadSound, true);
-					}
+					ammo = ((EntityPlayer)getControllingPassenger()).inventory.getStackInSlot(slot);
+					if(!((EntityPlayer)getControllingPassenger()).capabilities.isCreativeMode)
+						((EntityPlayer)getControllingPassenger()).inventory.decrStackSize(slot, 1);
+					reloadTimer = type.reloadTime;
+					PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.reloadSound, true);
 				}
 			}
 		}
 		
 		if(!world.isRemote && reloadTimer <= 0 && shootDelay <= 0)
 		{
+			FlansMod.log.info("bas1");
 			Boolean shootPlayer = mouseHeld && getControllingPassenger() instanceof EntityPlayerMP;
 			
 			if (target != null || shootPlayer)
@@ -376,23 +368,22 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				
 				for(int j = 0; j < type.numBarrels; j++)
 				{
-					if(type.shareAmmo)
-						j = 0;
-					if(shootDelay <= 0 && ammo[j] != null && !ammo[j].isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
+					if(shootDelay <= 0 && ammo != null && !ammo.isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
 					{
+						FlansMod.log.info("bas3");
 						// Fire
-						BulletType bullet = BulletType.getBullet(ammo[j].getItem());
+						BulletType bullet = BulletType.getBullet(ammo.getItem());
 						if(shootPlayer)
 						{
 							if(!player.capabilities.isCreativeMode)
-								ammo[j].damageItem(1, player);
+								ammo.damageItem(1, player);
 						} else
 						{
-							ammo[j].setItemDamage(ammo[j].getItemDamage() + 1);
+							ammo.setItemDamage(ammo.getItemDamage() + 1);
 						}
 						shootDelay = type.shootDelay;
 						barrelRecoil[j] = type.recoil;
-						
+						FlansMod.log.info("bas4");
 						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
 								type.barrelY[currentBarrel] / 16D,
 								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
@@ -400,16 +391,19 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						Double radianYaw = Math.toRadians(gunYaw + 90F);
 						Double radianPitch = Math.toRadians(gunPitch);
 						Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
-						
+						FlansMod.log.info("bas5");
 						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage);
 						FiredShot shot = new FiredShot(weapon, bullet, this, player);
 						//TODO use Vec3d
+						FlansMod.log.info("bas6");
 						ShotHandler.fireGun(world, shot, bullet.numBullets, new Vector3f(origin), shootingDirection);
-						
+						FlansMod.log.info("bas7");
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
+						FlansMod.log.info("bas8");
 					}
 				}
 				currentBarrel = (currentBarrel + 1) % type.numBarrels;
+				FlansMod.log.info("bas9");
 			}
 		}
 		if(!world.isRemote)
@@ -427,8 +421,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		if(world.isRemote)
 			return null;
-		if(placer == null && placerName != null)
+		if(placer == null && placerName != null) {
 			placer = world.getPlayerEntityByName(placerName);
+		}
+		
 		for(Object obj : world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(type.targetRange, type.targetRange, type.targetRange)))
 		{
 			Entity candidateEntity = (Entity)obj;
@@ -484,11 +480,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			return;
 		dropItem(type.getItem(), 1);
 		// Drop ammo boxes
-		for(ItemStack stack : ammo)
-		{
-			if(stack != null && !stack.isEmpty())
-				entityDropItem(stack, 0.5F);
-		}
+		if (ammo != null && !ammo.isEmpty()) 
+			entityDropItem(ammo, 0.5F);
 	}
 	
 	@Override
@@ -516,11 +509,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		nbttagcompound.setInteger("Health", health);
 		nbttagcompound.setFloat("RotationYaw", rotationYaw);
 		nbttagcompound.setFloat("RotationPitch", rotationPitch);
-		for(int i = 0; i < type.numBarrels; i++)
-		{
-			if(ammo[i] != null)
-				nbttagcompound.setTag("Ammo " + i, ammo[i].writeToNBT(new NBTTagCompound()));
-		}
+		if(ammo != null)
+			nbttagcompound.setTag("Ammo", ammo.writeToNBT(new NBTTagCompound()));
 		if (placer != null) {
 			nbttagcompound.setString("Placer", placer.getName());
 		} else if (placerName != null) {
@@ -536,16 +526,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		health = nbttagcompound.getInteger("Health");
 		rotationYaw = nbttagcompound.getFloat("RotationYaw");
 		rotationPitch = nbttagcompound.getFloat("RotationPitch");
-		for(int i = 0; i < type.numBarrels; i++)
-		{
-			ammo[i] = new ItemStack(nbttagcompound.getCompoundTag("Ammo " + i));
-		}
+		ammo = new ItemStack(nbttagcompound.getCompoundTag("Ammo"));
 		placerName = nbttagcompound.getString("Placer");
 	}
 	
 	@Override
 	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) //interact : change back when Forge updates
 	{
+		FlansMod.log.info("interactplayer");
 		// Player right clicked on gun
 		// Mount gun
 		if(getControllingPassenger() != null && (getControllingPassenger() instanceof EntityPlayer) && getControllingPassenger() != entityplayer)
@@ -561,20 +549,18 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			}
 			if(!isSentry())
 				entityplayer.startRiding(this);
-			for(int i = 0; i < (type.shareAmmo ? 1 : type.numBarrels); i++)
+
+			if(ammo == null  || ammo.isEmpty())
 			{
-				if(ammo[i] == null  || ammo[i].isEmpty())
+				int slot = findAmmo(entityplayer);
+				if(slot >= 0)
 				{
-					int slot = findAmmo(entityplayer);
-					if(slot >= 0)
-					{
-						ammo[i] = entityplayer.inventory.getStackInSlot(slot).copy();
-						ammo[i].setCount(1);
-						if(!entityplayer.capabilities.isCreativeMode)
-							entityplayer.inventory.decrStackSize(slot, 1);
-						reloadTimer = type.reloadTime;
-						world.playSound(posX, posY, posZ, FlansModResourceHandler.getSoundEvent(type.reloadSound), SoundCategory.PLAYERS, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F), true);
-					}
+					ammo = entityplayer.inventory.getStackInSlot(slot).copy();
+					ammo.setCount(1);
+					if(!entityplayer.capabilities.isCreativeMode)
+						entityplayer.inventory.decrStackSize(slot, 1);
+					reloadTimer = type.reloadTime;
+					world.playSound(posX, posY, posZ, FlansModResourceHandler.getSoundEvent(type.reloadSound), SoundCategory.PLAYERS, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F), true);
 				}
 			}
 		}

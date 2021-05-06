@@ -34,7 +34,7 @@ SmokeTrail True
 LockOnToPlanes True
 LockOnToVehicles False
 LockOnToMechas False
-LockOnToPlayers False
+LockOnToPlayers True
 LockOnToLivings False
 MaxLockOnAngle 20.0
 //Recipe

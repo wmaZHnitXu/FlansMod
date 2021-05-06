@@ -17,10 +17,10 @@ TurnRightSpeed 0
 //For calculating whether wheels are on the ground or not for driving
 WheelRadius 1.0
 //Wheel positions for collision handling. Tanks still have 4 wheels, they are just the corner ones.
-WheelPosition 0 -26 -10 0
-WheelPosition 1 -26 -10 0
-WheelPosition 2 20 -10 18
-WheelPosition 3 20 -10 -18
+WheelPosition 0 22 -10 22
+WheelPosition 1 -22 -10 22
+WheelPosition 2 -22 -10 -22
+WheelPosition 3 22 -10 -22
 WheelSpringStrength 0.5
 //If true, then all wheels will apply drive forces
 FourWheelDrive true
@@ -40,10 +40,8 @@ AlternateSecondary False
 ModePrimary FullAuto
 ModeSecondary FullAuto
 //Add shoot origins. These are the points on your vehicle from which bullets / missiles / shells / bombs appear
-ShootPointPrimary -16 17 14 turret 50Cal
-ShootPointPrimary -12 12 16 turret 50Cal
-ShootPointPrimary -16 17 -15 turret 50Cal
-ShootPointPrimary -12 12 -17 turret 50Cal
+ShootPointPrimary -57,5 9,5 4,5 turret 50Cal
+ShootPointPrimary -57,5 9,5 -3,5 turret 50Cal
 // ------------------------------------------------------ Inventory ------------------------------------------------------
 CargoSlots 0
 BombSlots 0
@@ -53,8 +51,7 @@ AddAmmo browningAmmo
 //Fuel Tank Size (1 point of fuel will keep one propeller going with throttle at 1 for 1 tick)
 FuelTankSize 0
 // ------------------------------------------------------ Passengers ------------------------------------------------------
-Driver 0 3 0 -360 360 -5 89
-RotatedDriverOffset -6 0 2
+Driver -13 0 -18
 Passengers 0
 // ------------------------------------------------------- Sounds -------------------------------------------------------
 StartSound None
@@ -78,5 +75,5 @@ SetupPart turret 40 -10 -4 -10 20 12 20
 SetupPart leftTrack 20 -20 -8 -10 40 6 2
 SetupPart rightTrack 20 -20 -8 8 40 6 2
 BulletDetection 7
-ModelScale 1
+ModelScale 1.1
 Description Amercian AA Gun
