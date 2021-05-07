@@ -19,7 +19,7 @@ Recoil 5
 //Damage in half hearts
 Damage 10
 //The higher this value, the more the bullets spread
-Accuracy 50
+Accuracy 20
 ShareAmmo true
 //Lock on stuff
 TargetMobs true
@@ -36,7 +36,7 @@ ReloadSound BrowningReload
 GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical
 TopViewLimit 85
-BottomViewLimit 25
+BottomViewLimit 15
 RecipeOutput 1
 HasStatus true
 Recipe I ingotIron B blockIron A aaBarrel L leather

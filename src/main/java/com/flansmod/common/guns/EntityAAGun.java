@@ -4,6 +4,8 @@ import org.lwjgl.input.Mouse;
 
 import ic2.core.block.wiring.TileEntityChargepadBlock;
 import ic2.core.block.wiring.TileEntityChargepadCESU;
+import ic2.core.block.wiring.TileEntityElectricBlock;
+import ic2.core.block.wiring.TileEntityElectricCESU;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -21,6 +23,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -82,6 +85,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	 * For getting the placer after a reload
 	 */
 	public String placerName = null;
+
+	public String placerDispName = null;
 	/**
 	 * The sentry's current target
 	 */
@@ -111,6 +116,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		this(world);
 		placer = p;
 		placerName = p.getName();
+		placerDispName = p.getDisplayNameString();
 		type = type1;
 		initType();
 		setPosition(d, d1, d2);
@@ -189,6 +195,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i)
 	{
+		if (world.isRemote) return false;
 		if(damagesource.damageType.equals("player"))
 		{
 			Entity player = damagesource.getTrueSource();
@@ -201,7 +208,11 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			}
 			else if(TeamsManager.canBreakGuns)
 			{
-				setDead();
+				if (ammo != null && !ammo.isEmpty()) {
+					entityDropItem(ammo, 0.5F);
+					ammo = null;
+				}
+				else setDead();
 			}
 		}
 		else
@@ -243,7 +254,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		ticksSinceUsed++;
 		if(TeamsManager.aaLife > 0 && ticksSinceUsed > TeamsManager.aaLife * 20)
 		{
-			setDead();
+			//setDead();
 		}
 		
 		if(getControllingPassenger() != null)
@@ -274,10 +285,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			{
 				target = getValidTarget();
 			}
-			if(target != null)
+			if(target != null && status != 1)
 			{
 				double dX = target.posX - posX;
-				double dY = target.posY - (posY + 0.5F);
+				double dY = target.posY + 0.2d - (posY + type.barrelY[0] / 16);
 				double dZ = target.posZ - posZ;
 				
 				double distanceToTarget = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
@@ -290,8 +301,17 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					float newPitch = -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F;
 					
 					float turnSpeed = 0.25F;
+
+					float diffYaw = newYaw - gunYaw;
+					if (diffYaw > 3.14159F) {
+						diffYaw -= 3.14159F;
+					}
+					else if (diffYaw < -3.14159F) {
+						diffYaw += 3.14159F;
+					}
 					
-					gunYaw += (newYaw - gunYaw) * turnSpeed;
+
+					gunYaw += (diffYaw) * turnSpeed;
 					gunPitch += (newPitch - gunPitch) * turnSpeed;
 				}
 			}
@@ -364,7 +384,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			}
 		}
 		
-		if(!world.isRemote && reloadTimer <= 0 && shootDelay <= 0)
+		if(!world.isRemote && reloadTimer <= 0 && shootDelay <= 0 && status != 1)
 		{
 			Boolean shootPlayer = mouseHeld && getControllingPassenger() instanceof EntityPlayerMP;
 			
@@ -394,7 +414,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						
 						Double radianYaw = Math.toRadians(gunYaw + 90F);
 						Double radianPitch = Math.toRadians(gunPitch);
-						Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
+						Vector3f shootingDirection;
+						if (target == null)
+							shootingDirection = new Vector3f(-Math.sin(radianYaw), -Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
+						else shootingDirection = new Vector3f((target.getPositionVector().subtract(getPositionVector())).normalize());
 						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage);
 						FiredShot shot = new FiredShot(weapon, bullet, this, player);
 						//TODO use Vec3d
@@ -454,7 +477,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				{
 					if(candidateEntity instanceof EntityPlayer)
 					{
-						if(candidateEntity == placer || candidateEntity.getName().equals(placerName))
+						if(candidateEntity == placer || GetTeamCodeFromString(candidateEntity.getDisplayName().getFormattedText())== GetTeamCodeFromString(placerDispName))
 							continue;
 						if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
 						{
@@ -535,6 +558,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		} else if (placerName != null) {
 			nbttagcompound.setString("Placer", placerName);
 		}
+		if (placerDispName != null) {
+			nbttagcompound.setString("PlacerDisp", placerDispName);
+		}
 	}
 	
 	@Override
@@ -547,12 +573,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		rotationPitch = nbttagcompound.getFloat("RotationPitch");
 		ammo = new ItemStack(nbttagcompound.getCompoundTag("Ammo"));
 		placerName = nbttagcompound.getString("Placer");
+		placerDispName = nbttagcompound.getString("PlacerDisp");
 	}
 	
 	@Override
 	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) //interact : change back when Forge updates
 	{
-		FlansMod.log.info("interactplayer");
 		// Player right clicked on gun
 		// Mount gun
 		if(getControllingPassenger() != null && (getControllingPassenger() instanceof EntityPlayer) && getControllingPassenger() != entityplayer)
@@ -582,6 +608,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					world.playSound(posX, posY, posZ, FlansModResourceHandler.getSoundEvent(type.reloadSound), SoundCategory.PLAYERS, 1.0F, 1.0F / (rand.nextFloat() * 0.4F + 0.8F), true);
 				}
 			}
+			entityplayer.sendMessage(new TextComponentString(ammo != null && !ammo.isEmpty() ? "Boezapas: " + (ammo.getMaxDamage() - ammo.getItemDamage()) + "/" + ammo.getMaxDamage() : "Boezapas pust"));
 		}
 		return true;
 	}
@@ -635,9 +662,31 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	}
 
 	public int getStatus () {
-		if (ammo == null || ammo.isEmpty()) return 2;
 		TileEntity te = world.getTileEntity(getPosition().down());
-		if (te == null || (te instanceof TileEntityChargepadBlock && ((TileEntityChargepadBlock)te).getStored() < 32)) return 1;
+		if (te == null || (te instanceof TileEntityElectricBlock && ((TileEntityElectricBlock)te).getStored() < 32)) return 1;
+		if (ammo == null || ammo.isEmpty()) return 2;
 		return 0; 
+	}
+
+	public void ConsumeEnergy () {
+		TileEntity te = world.getTileEntity(getPosition().down());
+		if (te == null || te instanceof TileEntityElectricBlock) {
+			TileEntityElectricBlock storage = (TileEntityElectricBlock)te;
+			storage.addEnergy(-32);
+		}
+	}
+
+	public int GetTeamCodeFromString (String s) {
+		if (s.length() < 2) return 6;
+		String symbols = s.substring(0,2);
+		switch (s) {
+			case "§9": return 0;
+			case "§c": return 1;
+			case "§a": return 2;
+			case "§e": return 3;
+			case "§f": return 4;
+			case "§0": return 5;
+			default: return 6;
+		}
 	}
 }
