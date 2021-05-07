@@ -32,6 +32,7 @@ TargetRange 40
 ShootDelay 3
 ShootSound RPDShoot
 ReloadSound BrowningReload
+Consumption 32
 //The position of the player relative to the pivot
 GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical

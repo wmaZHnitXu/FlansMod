@@ -37,6 +37,7 @@ public class AAGunType extends InfoType
 	public float bottomViewLimit = 0F;
 	public boolean hasStatus;
 	public int[] barrelX, barrelY, barrelZ;
+	public int consumption;
 	/**
 	 * Sentry mode. If target players is true then it either targets everyone on the other team, or everyone other than the owner when not playing with teams
 	 */
@@ -88,6 +89,9 @@ public class AAGunType extends InfoType
 			targetRange = Read(split, "TargetRange", targetRange);
 			bottomViewLimit = Read(split, "BottomViewLimit", bottomViewLimit);
 			
+			if(split[0].equals("Consumption"))
+				consumption = Integer.parseInt(split[1]);
+
 			if(split[0].equals("HasStatus"))
 				hasStatus = Boolean.parseBoolean(split[1]);
 			

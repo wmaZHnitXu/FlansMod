@@ -303,11 +303,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					float turnSpeed = 0.25F;
 
 					float diffYaw = newYaw - gunYaw;
-					if (diffYaw > 3.14159F) {
-						diffYaw -= 3.14159F;
-					}
-					else if (diffYaw < -3.14159F) {
-						diffYaw += 3.14159F;
+					if (Math.abs(diffYaw) > 3.14159F) {
+						if (gunYaw > newYaw) {
+							newYaw = newYaw + 3.14159F * 2;
+						}
+						else {
+							newYaw = newYaw - 3.14159F * 2;
+						}
+						diffYaw = newYaw - gunYaw;
 					}
 					
 
@@ -408,9 +411,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						}
 						shootDelay = type.shootDelay;
 						barrelRecoil[j] = type.recoil;
-						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D - type.barrelZ[currentBarrel] / 16D,
+						Vec3d origin = rotate(type.barrelX[currentBarrel] / 16D,
 								type.barrelY[currentBarrel] / 16D,
-								type.barrelX[currentBarrel] / 16D + type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
+								type.barrelZ[currentBarrel] / 16D).add(posX, posY, posZ);
 						
 						Double radianYaw = Math.toRadians(gunYaw + 90F);
 						Double radianPitch = Math.toRadians(gunPitch);
@@ -436,6 +439,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunAngles(this), posX, posY, posZ, 100F, dimension);
 			status = getStatus();
 			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunStatus(this), posX, posY, posZ, 100F, dimension);
+			if (status != 1) {
+				ConsumeEnergy();
+			}
 		}
 	}
 
@@ -663,7 +669,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 	public int getStatus () {
 		TileEntity te = world.getTileEntity(getPosition().down());
-		if (te == null || (te instanceof TileEntityElectricBlock && ((TileEntityElectricBlock)te).getStored() < 32)) return 1;
+		if (te == null || (te instanceof TileEntityElectricBlock && ((TileEntityElectricBlock)te).getStored() < type.consumption)) return 1;
 		if (ammo == null || ammo.isEmpty()) return 2;
 		return 0; 
 	}
@@ -672,7 +678,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		TileEntity te = world.getTileEntity(getPosition().down());
 		if (te == null || te instanceof TileEntityElectricBlock) {
 			TileEntityElectricBlock storage = (TileEntityElectricBlock)te;
-			storage.addEnergy(-32);
+			if (storage.getStored() > type.consumption)
+			storage.addEnergy(-type.consumption);
 		}
 	}
 
