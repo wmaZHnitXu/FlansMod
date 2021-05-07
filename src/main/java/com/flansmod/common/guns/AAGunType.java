@@ -66,6 +66,7 @@ public class AAGunType extends InfoType
 		{
 			if(FMLCommonHandler.instance().getSide().isClient() && split[0].equals("Model"))
 			{
+				FlansMod.log.info("debug load model: " + split[1] + " " + shortName);
 				model = FlansMod.proxy.loadModel(split[1], shortName, ModelAAGun.class);
 			}
 			

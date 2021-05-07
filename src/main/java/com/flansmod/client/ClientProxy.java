@@ -68,6 +68,7 @@ import com.flansmod.client.model.RenderNull;
 import com.flansmod.client.model.RenderParachute;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
+import com.flansmod.client.model.mw.ModelSentryMg;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.EntityItemCustomRender;
 import com.flansmod.common.FlansMod;
@@ -410,6 +411,7 @@ public class ClientProxy extends CommonProxy
 			return null;
 		try
 		{
+			if (s.substring(s.length() - 2, s.length()).equals("HC")) return hardcodedModels(s, typeClass);
 			return typeClass.cast(Class.forName(modelDir + getModelName(s)).getConstructor().newInstance());
 		}
 		catch(Exception e)
@@ -419,7 +421,14 @@ public class ClientProxy extends CommonProxy
 		}
 		return null;
 	}
-	
+
+	public <T> T hardcodedModels (String s, Class<T> typeClass) {
+		switch (s) {
+			case "mw.SentryMgHC": return typeClass.cast(new ModelSentryMg());
+		}
+		return null;
+	}
+ 	
 	/**
 	 * Sound loading method. Defers to FlansModResourceHandler
 	 */

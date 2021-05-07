@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 import com.flansmod.client.handlers.FlansModResourceHandler;
+import com.flansmod.common.FlansMod;
 import com.flansmod.common.guns.EntityAAGun;
 
 
@@ -54,7 +55,7 @@ public class RenderAAGun extends Render<EntityAAGun>
 	{
 		ResourceLocation result = FlansModResourceHandler.getTexture(entity.type);
 		if (!entity.type.hasStatus || entity.status == 0) return result;
-		return new ResourceLocation(result.getPath().substring(0, result.getPath().length() - 4) + entity.status + ".png");
+		return new ResourceLocation("flansmod", result.getPath().substring(0, result.getPath().length() - 4) + entity.status + ".png");
 	}
 	
 	public static class Factory implements IRenderFactory<EntityAAGun>

@@ -415,7 +415,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		if(!world.isRemote)
 		{
 			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunAngles(this), posX, posY, posZ, 100F, dimension);
-			if (ticksExisted % 10 == 0) getStatus();
+			status = getStatus();
 			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunStatus(this), posX, posY, posZ, 100F, dimension);
 		}
 	}
