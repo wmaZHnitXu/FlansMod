@@ -277,7 +277,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			if(target != null)
 			{
 				double dX = target.posX - posX;
-				double dY = target.posY - (posY + 1.5F);
+				double dY = target.posY - (posY + 0.5F);
 				double dZ = target.posZ - posZ;
 				
 				double distanceToTarget = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
@@ -366,7 +366,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		
 		if(!world.isRemote && reloadTimer <= 0 && shootDelay <= 0)
 		{
-			FlansMod.log.info("bas1");
 			Boolean shootPlayer = mouseHeld && getControllingPassenger() instanceof EntityPlayerMP;
 			
 			if (target != null || shootPlayer)
@@ -377,7 +376,6 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				{
 					if(shootDelay <= 0 && ammo != null && !ammo.isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
 					{
-						FlansMod.log.info("bas3");
 						// Fire
 						BulletType bullet = BulletType.getBullet(ammo.getItem());
 						if(shootPlayer)
@@ -397,27 +395,37 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						Double radianYaw = Math.toRadians(gunYaw + 90F);
 						Double radianPitch = Math.toRadians(gunPitch);
 						Vector3f shootingDirection = new Vector3f(-Math.sin(radianYaw), Math.cos(radianYaw)*-Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
-						FlansMod.log.info("bas5");
 						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage);
 						FiredShot shot = new FiredShot(weapon, bullet, this, player);
 						//TODO use Vec3d
-						FlansMod.log.info("bas6");
 						ShotHandler.fireGun(world, shot, bullet.numBullets, new Vector3f(origin), shootingDirection);
-						FlansMod.log.info("bas7");
 						PacketPlaySound.sendSoundPacket(posX, posY, posZ, 50, dimension, type.shootSound, true);
-						FlansMod.log.info("bas8");
 					}
 				}
 				currentBarrel = (currentBarrel + 1) % type.numBarrels;
-				FlansMod.log.info("bas9");
 			}
 		}
 		if(!world.isRemote)
 		{
+			if (target != null && ticksExisted % 20 == 0 && !TargetTrace(target)) {
+				target = null;
+			}
 			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunAngles(this), posX, posY, posZ, 100F, dimension);
 			status = getStatus();
 			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunStatus(this), posX, posY, posZ, 100F, dimension);
 		}
+	}
+
+	public boolean TargetTrace (Entity e) {
+		if (e == null) return false;
+		Vec3d targetV = e.getPositionVector();
+		Vec3d step = e.getPositionVector().subtract(getPositionVector().add(0,1,0)).normalize();
+		Vec3d currentPos = getPositionVector().add(0,1,0);
+		while (currentPos.distanceTo(targetV) > 2) {
+			currentPos = currentPos.add(step);
+			if (world.getBlockState(new BlockPos((int)currentPos.x,(int)currentPos.y,(int)currentPos.z)).isNormalCube()) return false;
+		}
+		return true;
 	}
 	
 	public boolean isSentry()
@@ -458,7 +466,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 								continue;
 						}
 					}
-					return candidateEntity;
+					if (TargetTrace(candidateEntity))
+						return candidateEntity;
 				}
 			}
 		}

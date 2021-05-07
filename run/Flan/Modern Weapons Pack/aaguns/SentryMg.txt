@@ -8,8 +8,8 @@ Model mw.SentryMgHC
 //Place the texture .png in the skins folder
 Texture sentrymg
 NumBarrels 2
-Barrel 0 57.5f 9.5f -3.5f
-Barrel 1 57.5f 9.5f 4.5f
+Barrel 0 10 20 4
+Barrel 1 10 20 -3
 FireAlternately False
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 100
@@ -17,9 +17,9 @@ Health 100
 //The amount of gun recoil
 Recoil 5
 //Damage in half hearts
-Damage 4
+Damage 10
 //The higher this value, the more the bullets spread
-Accuracy 20
+Accuracy 50
 ShareAmmo true
 //Lock on stuff
 TargetMobs true
@@ -35,8 +35,8 @@ ReloadSound BrowningReload
 //The position of the player relative to the pivot
 GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical
-TopViewLimit 75
-BottomViewLimit 0
+TopViewLimit 85
+BottomViewLimit 25
 RecipeOutput 1
 HasStatus true
 Recipe I ingotIron B blockIron A aaBarrel L leather
