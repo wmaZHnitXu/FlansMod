@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -400,6 +401,16 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					if(shootDelay <= 0 && ammo != null && !ammo.isEmpty() && (!type.fireAlternately || type.fireAlternately && currentBarrel == j))
 					{
 						// Fire
+						if (type.shotConsumption > 0) {
+							TileEntity te = world.getTileEntity(getPosition().down());
+							if (te instanceof TileEntityElectricBlock && ((TileEntityElectricBlock)te).getStored() >= type.shotConsumption) {
+								((TileEntityElectricBlock)te).addEnergy(-type.shotConsumption);
+							} 
+							else {
+								status = getStatus();
+								return;
+							}
+						}
 						BulletType bullet = BulletType.getBullet(ammo.getItem());
 						if(shootPlayer)
 						{
@@ -435,6 +446,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			if (target != null && ticksExisted % 20 == 0 && !TargetTrace(target)) {
 				target = null;
+				if (status == 2 && ammo == null) {
+					GetAmmoFromChests();
+				}
 			}
 			FlansMod.getPacketHandler().sendToAllAround(new PacketAAGunAngles(this), posX, posY, posZ, 100F, dimension);
 			status = getStatus();
@@ -443,6 +457,29 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				ConsumeEnergy();
 			}
 		}
+	}
+
+	public boolean GetAmmoFromChests () {
+		TileEntityChest candidate = null;
+		BlockPos basePos = getPosition().down();
+		if (candidate == null) {TileEntity te = world.getTileEntity(basePos.east()); if (te instanceof TileEntityChest) candidate = ((TileEntityChest)te);}
+		if (candidate == null) {TileEntity te = world.getTileEntity(basePos.west()); if (te instanceof TileEntityChest) candidate = ((TileEntityChest)te);}
+		if (candidate == null) {TileEntity te = world.getTileEntity(basePos.south()); if (te instanceof TileEntityChest) candidate = ((TileEntityChest)te);}
+		if (candidate == null) {TileEntity te = world.getTileEntity(basePos.north()); if (te instanceof TileEntityChest) candidate = ((TileEntityChest)te);}
+		if (candidate != null) {
+			for(int i = 0; i < candidate.getSizeInventory(); i++)
+			{
+				ItemStack stack = candidate.getStackInSlot(i);
+				if(type.isAmmo(stack))
+				{
+					ammo = candidate.getStackInSlot(i).copy();
+					ammo.setCount(1);
+					candidate.decrStackSize(i, 1);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public boolean TargetTrace (Entity e) {
@@ -669,8 +706,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 	public int getStatus () {
 		TileEntity te = world.getTileEntity(getPosition().down());
-		if (te == null || (te instanceof TileEntityElectricBlock && ((TileEntityElectricBlock)te).getStored() < type.consumption)) return 1;
-		if (ammo == null || ammo.isEmpty()) return 2;
+		if (te == null || (te instanceof TileEntityElectricBlock && ((TileEntityElectricBlock)te).getStored() < type.consumption || ((TileEntityElectricBlock)te).getOutput() == 0)) return 1;
+		if (ammo == null || ammo.isEmpty() || ((TileEntityElectricBlock)te).getStored() < type.shotConsumption) return 2;
 		return 0; 
 	}
 
@@ -680,6 +717,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 			TileEntityElectricBlock storage = (TileEntityElectricBlock)te;
 			if (storage.getStored() > type.consumption)
 			storage.addEnergy(-type.consumption);
+
+			else status = getStatus();
 		}
 	}
 

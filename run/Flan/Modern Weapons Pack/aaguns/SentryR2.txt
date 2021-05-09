@@ -1,15 +1,15 @@
 //This is a sentry gun, but it uses AA Gun code
-Name SentryMg
-ShortName sentrymg
+Name RocketSentry2
+ShortName sentryr2
 //The ammo this gun uses (shortName)
-Ammo minigunAmmo
-Icon mim23
-Model mw.SentryMgHC
+Ammo at4Ammo
+Icon Sentryr2
+Model mw.Sentryr2
 //Place the texture .png in the skins folder
-Texture sentrymg
+Texture sentryrr
 NumBarrels 2
-Barrel 0 10 20 4
-Barrel 1 10 20 -3
+Barrel 0 0 25 -23
+Barrel 1 0 25 23
 FireAlternately False
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 100
@@ -17,29 +17,29 @@ Health 100
 //The amount of gun recoil
 Recoil 5
 //Damage in half hearts
-Damage 10
+Damage 20
 //The higher this value, the more the bullets spread
-Accuracy 20
+Accuracy 30
 ShareAmmo true
 //Lock on stuff
 TargetMobs true
-TargetPlayers true
+TargetPlayers false
 TargetVehicles false
 TargetPlanes false
-TargetMechas true
-TargetRange 50
+TargetMechas false
+TargetRange 60
 //Time in ticks between rounds
-ShootDelay 3
-ShootSound RPDShoot
-ReloadSound BrowningReload
-Consumption 16
+ShootDelay 5
+ShootSound RPGShoot
+ReloadSound MWBazookaReload
 //The position of the player relative to the pivot
 GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical
-TopViewLimit 85
-BottomViewLimit 15
+TopViewLimit 75
+BottomViewLimit 10
 RecipeOutput 1
 HasStatus true
+Consumption 16
 Recipe I ingotIron B blockIron A aaBarrel L leather
  AA
 LAA

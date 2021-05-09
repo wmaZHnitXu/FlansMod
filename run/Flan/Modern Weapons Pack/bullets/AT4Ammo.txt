@@ -9,12 +9,12 @@ FallSpeed 0.5
 //The maximum stack size
 MaxStackSize 2
 //The number of rounds each item has. Limited to 32000.
-RoundsPerItem 1
+RoundsPerItem 40
 //The damage multiplier caused by the bullet on hitting an entity
-DamageVsLiving 5000
-DamageVsVehicles 5000
+DamageVsLiving 500
+DamageVsVehicles 500
 //Size of explosion caused
-Explosion 1
+Explosion 0
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
 ExplodeOnImpact True
 Fuse 0
@@ -28,3 +28,9 @@ HitSound bullet
 //Whether or not the bullet can travel through an entity having hit it
 Penetrates False
 SmokeTrail True
+LockOnToPlanes False
+LockOnToVehicles False
+LockOnToMechas False
+LockOnToPlayers True
+LockOnToLivings True
+MaxLockOnAngle 20.0
