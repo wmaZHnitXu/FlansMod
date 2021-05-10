@@ -298,18 +298,18 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					target = null;
 				else
 				{
-					float newYaw = 180F + (float)Math.atan2(dZ, dX) * 180F / 3.14159F;
-					float newPitch = -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159F;
+					float newYaw = 180F + (float)Math.atan2(dZ, dX) * 180F / 3.14159265F;
+					float newPitch = -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159265F;
 					
 					float turnSpeed = 0.25F;
 
 					float diffYaw = newYaw - gunYaw;
-					if (Math.abs(diffYaw) > 3.14159F) {
+					if (Math.abs(diffYaw) > 3.14159265F) {
 						if (gunYaw > newYaw) {
-							newYaw = newYaw + 3.14159F * 2;
+							newYaw = newYaw + 3.14159265F * 2;
 						}
 						else {
-							newYaw = newYaw - 3.14159F * 2;
+							newYaw = newYaw - 3.14159265F * 2;
 						}
 						diffYaw = newYaw - gunYaw;
 					}
@@ -446,7 +446,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		{
 			if (target != null && ticksExisted % 20 == 0 && !TargetTrace(target)) {
 				target = null;
-				if (status == 2 && ammo == null) {
+			}
+			if (ticksExisted % 20 == 0) {
+				if (ammo == null) {
 					GetAmmoFromChests();
 				}
 			}
@@ -467,11 +469,13 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		if (candidate == null) {TileEntity te = world.getTileEntity(basePos.south()); if (te instanceof TileEntityChest) candidate = ((TileEntityChest)te);}
 		if (candidate == null) {TileEntity te = world.getTileEntity(basePos.north()); if (te instanceof TileEntityChest) candidate = ((TileEntityChest)te);}
 		if (candidate != null) {
+			FlansMod.log.info("nenull");
 			for(int i = 0; i < candidate.getSizeInventory(); i++)
 			{
 				ItemStack stack = candidate.getStackInSlot(i);
 				if(type.isAmmo(stack))
 				{
+					FlansMod.log.info("apply");
 					ammo = candidate.getStackInSlot(i).copy();
 					ammo.setCount(1);
 					candidate.decrStackSize(i, 1);

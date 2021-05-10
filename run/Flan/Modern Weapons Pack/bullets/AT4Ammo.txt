@@ -14,7 +14,7 @@ RoundsPerItem 40
 DamageVsLiving 500
 DamageVsVehicles 500
 //Size of explosion caused
-Explosion 0
+Explosion 1
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
 ExplodeOnImpact True
 Fuse 0
@@ -31,6 +31,6 @@ SmokeTrail True
 LockOnToPlanes False
 LockOnToVehicles False
 LockOnToMechas False
-LockOnToPlayers True
+LockOnToPlayers False
 LockOnToLivings True
-MaxLockOnAngle 20.0
+MaxLockOnAngle 5.0

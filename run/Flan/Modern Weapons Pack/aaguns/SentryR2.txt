@@ -19,7 +19,7 @@ Recoil 5
 //Damage in half hearts
 Damage 20
 //The higher this value, the more the bullets spread
-Accuracy 30
+Accuracy 10
 ShareAmmo true
 //Lock on stuff
 TargetMobs true
