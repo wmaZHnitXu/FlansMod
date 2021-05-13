@@ -105,7 +105,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	{
 		super(world);
 		preventEntitySpawning = true;
-		setSize(2.0F, 2.0F);
+		setSize(4.0F, 4.0F);
 		yOffset = 0F;
 		gunYaw = 0;
 		gunPitch = 0;
