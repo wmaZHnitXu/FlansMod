@@ -395,7 +395,7 @@ public class FlansMod
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:CustomItem"), EntityItemCustomRender.class, "CustomItem", 89, this, 100, 20, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Plane"), EntityPlane.class, "Plane", 90, this, 250, 3, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:MG"), EntityMG.class, "MG", 91, this, 40, 5, true);
-		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:AAGun"), EntityAAGun.class, "AAGun", 92, this, 40, 500, false);
+		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:AAGun"), EntityAAGun.class, "AAGun", 92, this, 150, 500, false);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flagpole"), EntityFlagpole.class, "Flagpole", 93, this, 40, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Flag"), EntityFlag.class, "Flag", 94, this, 40, 5, true);
 		EntityRegistry.registerModEntity(new ResourceLocation("flansmod:Vehicle"), EntityVehicle.class, "Vehicle", 95, this, 250, 10, false);

@@ -43,7 +43,7 @@ public class EntityCamera extends EntityLivingBase
 		
 		float lerpAmount = 0.1F;
 		
-		setPosition(posX + dX * lerpAmount, posY + dY * lerpAmount, posZ + dZ * lerpAmount);
+		setPosition(posX + dX * lerpAmount, posY + 4 + dY * lerpAmount, posZ + dZ * lerpAmount);
 		
 		rotationYaw = driveable.axes.getYaw() - 90;
 		rotationPitch = driveable.axes.getPitch();

@@ -1,6 +1,7 @@
 package com.flansmod.common.eventhandlers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -31,10 +32,10 @@ public class PlayerDeathEventListener
 			EntityDamageSourceFlan source = (EntityDamageSourceFlan) event.getSource();
 			EntityPlayer died = (EntityPlayer) event.getEntity();
 			
-			Team killedTeam = PlayerHandler.getPlayerData(died).team;
-			Team killerTeam = PlayerHandler.getPlayerData(source.getCausedPlayer()).team;
+			//Team killedTeam = PlayerHandler.getPlayerData(died).team;
+			//Team killerTeam = PlayerHandler.getPlayerData(source.getCausedPlayer()).team;
+			died.getEntityWorld().getMinecraftServer().getPlayerList().sendMessage(new TextComponentString(source.getCausedPlayer().getDisplayNameString() + " §fпристрелил " + died.getDisplayNameString()));
 			
-			FlansMod.getPacketHandler().sendToDimension(new PacketKillMessage(source.isHeadshot(), source.getWeapon(), (killedTeam == null ? "f" : killedTeam.textColour) + died.getName(), (killerTeam == null ? "f" : killerTeam.textColour) + source.getCausedPlayer().getName()), died.dimension);
 		}
 	}
 }

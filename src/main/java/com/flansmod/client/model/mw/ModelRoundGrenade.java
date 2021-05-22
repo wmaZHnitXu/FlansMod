@@ -12,10 +12,10 @@ public class ModelRoundGrenade extends ModelBase
 
 	public ModelRoundGrenade()
 	{
-		bodyModel = new ModelRendererTurbo(this, 0, 0, 16, 8);
-		bodyModel.addBox(-1F, -1F, -1F, 2, 2, 2);
-		headModel = new ModelRendererTurbo(this, 8, 0, 16, 8);
-		headModel.addBox(-0.5F, -0.5F, 0.5F, 1, 1, 1);
+		bodyModel = new ModelRendererTurbo(this, 0, 0, 32, 32);
+		bodyModel.addBox(-1F, -1F, -1F, 3, 3, 5, 0F); // Box 0
+		headModel = new ModelRendererTurbo(this, 8, 0, 32, 32);
+		headModel.addBox(0F, -0.25F, 0F, 1, 2, 1, 0F);
 		bodyModel.rotateAngleX = -3.14159265F / 2F;
 		headModel.rotateAngleX = -3.14159265F / 2F;
 	}

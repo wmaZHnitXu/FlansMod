@@ -118,6 +118,14 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		placer = p;
 		placerName = p.getName();
 		placerDispName = p.getDisplayNameString();
+		if (placer != null) {
+			Double D = d;
+			Double D1 = d1;
+			Double D2 = d2;
+			BlockPos dir = placer.getPosition().subtract(new BlockPos(D.intValue(),D1.intValue(),D2.intValue()));
+			if (dir.getX() > 0) gunYaw = 180; else gunYaw = 0;
+			if (dir.getZ() > 0) gunYaw = 90; else gunYaw = 270;
+		}
 		type = type1;
 		initType();
 		setPosition(d, d1, d2);
@@ -302,20 +310,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					float newPitch = -(float)Math.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * 180F / 3.14159265F;
 					
 					float turnSpeed = 0.25F;
-
-					float diffYaw = newYaw - gunYaw;
-					if (Math.abs(diffYaw) > 3.14159265F) {
-						if (gunYaw > newYaw) {
-							newYaw = newYaw + 3.14159265F * 2;
-						}
-						else {
-							newYaw = newYaw - 3.14159265F * 2;
-						}
-						diffYaw = newYaw - gunYaw;
-					}
-					
-
-					gunYaw += (diffYaw) * turnSpeed;
+					gunYaw = newYaw;
 					gunPitch += (newPitch - gunPitch) * turnSpeed;
 				}
 			}
@@ -524,9 +519,10 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				{
 					if(candidateEntity instanceof EntityPlayer)
 					{
-						if(candidateEntity == placer || GetTeamCodeFromString(candidateEntity.getDisplayName().getFormattedText())== GetTeamCodeFromString(placerDispName))
+						EntityPlayer plr = (EntityPlayer)candidateEntity;
+						if(candidateEntity == placer || GetTeamCodeFromString(plr.getDisplayNameString()) == GetTeamCodeFromString(placerDispName))
 							continue;
-						if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
+						/*if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
 						{
 							PlayerData placerData = PlayerHandler.getPlayerData(placer, world.isRemote ? Side.CLIENT : Side.SERVER);
 							PlayerData candidateData = PlayerHandler.getPlayerData((EntityPlayer)candidateEntity, world.isRemote ? Side.CLIENT : Side.SERVER);
@@ -535,6 +531,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 							if(!TeamsManager.getInstance().currentRound.gametype.playerCanAttack((EntityPlayerMP)placer, placerData.team, (EntityPlayerMP)candidateEntity, candidateData.team))
 								continue;
 						}
+						*/
 					}
 					if (TargetTrace(candidateEntity))
 						return candidateEntity;
@@ -729,7 +726,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public int GetTeamCodeFromString (String s) {
 		if (s.length() < 2) return 6;
 		String symbols = s.substring(0,2);
-		switch (s) {
+		switch (symbols) {
 			case "§9": return 0;
 			case "§c": return 1;
 			case "§a": return 2;

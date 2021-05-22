@@ -409,7 +409,7 @@ public class ClientRenderHooks
 		this.partialTicks = partialTick;
 	}
 	
-	public void renderThirdPersonWeapons(RenderLivingEvent.Pre event)
+	public void renderThirdPersonWeapons(RenderLivingEvent.Post event)
 	{
 		ModelBase mainModel = event.getRenderer().getMainModel();
 		EntityLivingBase entity = event.getEntity();
@@ -506,6 +506,7 @@ public class ClientRenderHooks
 					{
 						biped.bipedRightArm.postRender(0.0625F);
 						GlStateManager.translate(-0.05F, 0.4F, 0.05F);
+						GlStateManager.scale(-1, 1, 1); //ANET
 						ClientProxy.gunRenderer
 								.renderItem(CustomItemRenderType.EQUIPPED, hand, stack, mc.world, entity);
 					}
