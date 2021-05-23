@@ -1,17 +1,20 @@
 package com.flansmod.common.guns;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.vecmath.Vector3d;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
@@ -30,6 +33,7 @@ import com.flansmod.client.FlansModClient;
 import com.flansmod.client.debug.EntityDebugVector;
 import com.flansmod.client.handlers.FlansModResourceHandler;
 import com.flansmod.common.FlansMod;
+import com.flansmod.common.FlansModExplosion;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.mechas.EntityMecha;
@@ -335,6 +339,23 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 							break;
 						}
 					}
+				}
+				if (ticksExisted > 20 && type.stark) {
+					if (!world.isAirBlock(getPosition().add(0, -30, 0))) {
+						new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional(), type,
+								posX, posY, posZ, 1, false, false, false);
+						for (int i = 0; i < type.flak; i++) {
+							BulletType bullet = BulletType.getBullet(Item.getByNameOrId("flansmod:stark"));
+							FireableGun weapon = shot.getFireableGun();
+							FiredShot shota = new FiredShot(weapon, bullet);
+							Vector3f dir = new Vector3f(motionX + (rand.nextBoolean() ? -rand.nextDouble() : rand.nextDouble()),-1.25d -rand.nextDouble(),
+							 motionZ + (rand.nextBoolean() ? -rand.nextDouble() : rand.nextDouble()));
+							
+							ShotHandler.fireGun(world, shota, bullet.numBullets, new Vector3f(posX,posY,posZ), dir);
+						}
+						setDead();
+					}
+
 				}
 			}
 			//TODO Client homing fix

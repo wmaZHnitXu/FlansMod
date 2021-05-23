@@ -51,7 +51,7 @@ public class BulletType extends ShootableType
 	public float lockOnForce = 1F;
 	
 	public String trailTexture = "defaultBulletTrail";
-	
+	public boolean stark = false;
 	public ArrayList<PotionEffect> hitEffects = new ArrayList<>();
 	
 	/**
@@ -72,7 +72,9 @@ public class BulletType extends ShootableType
 		super.read(split, file);
 		try
 		{
-			if(split[0].equals("FlakParticles"))
+			if(split[0].equals("Stark"))
+				stark = true;
+			else if(split[0].equals("FlakParticles"))
 				flak = Integer.parseInt(split[1]);
 			else if(split[0].equals("FlakParticleType"))
 				flakParticles = split[1];
@@ -102,7 +104,6 @@ public class BulletType extends ShootableType
 			
 			else if(split[0].equals("TrailTexture"))
 				trailTexture = split[1];
-			
 			else if(split[0].equals("HasLight"))
 				hasLight = Boolean.parseBoolean(split[1].toLowerCase());
 			else if(split[0].equals("LockOnToDriveables"))

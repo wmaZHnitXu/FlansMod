@@ -443,7 +443,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 				target = null;
 			}
 			if (ticksExisted % 20 == 0) {
-				if (ammo == null) {
+				if (ammo == null || ammo.isEmpty()) {
 					GetAmmoFromChests();
 				}
 			}
@@ -484,8 +484,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 	public boolean TargetTrace (Entity e) {
 		if (e == null) return false;
 		Vec3d targetV = e.getPositionVector();
-		Vec3d step = e.getPositionVector().subtract(getPositionVector().add(0,1,0)).normalize();
-		Vec3d currentPos = getPositionVector().add(0,1,0);
+		Vec3d step = e.getPositionVector().subtract(getPositionVector().add(0,2,0)).normalize();
+		Vec3d currentPos = getPositionVector().add(0,2,0);
 		while (currentPos.distanceTo(targetV) > 2) {
 			currentPos = currentPos.add(step);
 			if (world.getBlockState(new BlockPos((int)currentPos.x,(int)currentPos.y,(int)currentPos.z)).isNormalCube()) return false;
