@@ -6,12 +6,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.world.World;
 
+import com.flansmod.common.driveables.DriveableType;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.vector.Vector3f;
 
 public class EntityCamera extends EntityLivingBase
 {
 	public EntityDriveable driveable;
+	public DriveableType type;
 	
 	public EntityCamera(World world)
 	{
@@ -24,6 +26,7 @@ public class EntityCamera extends EntityLivingBase
 		this(world);
 		driveable = d;
 		setPosition(d.posX, d.posY, d.posZ);
+		type = driveable.getDriveableType();
 	}
 	
 	@Override
@@ -33,7 +36,7 @@ public class EntityCamera extends EntityLivingBase
 		prevPosY = posY;
 		prevPosZ = posZ;
 		
-		Vector3f cameraPosition = new Vector3f();
+		Vector3f cameraPosition = new Vector3f(-type.cameraDistance,0,0);
 		cameraPosition = driveable.axes.findLocalVectorGlobally(cameraPosition);
 		
 		// Lerp it
@@ -41,9 +44,9 @@ public class EntityCamera extends EntityLivingBase
 		double dY = driveable.posY + cameraPosition.y - posY;
 		double dZ = driveable.posZ + cameraPosition.z - posZ;
 		
-		float lerpAmount = 0.1F;
+		float lerpAmount = 0.5F;
 		
-		setPosition(posX + dX * lerpAmount, posY + 4 + dY * lerpAmount, posZ + dZ * lerpAmount);
+		setPosition(posX + dX * lerpAmount, posY + 2d + dY * lerpAmount, posZ + dZ * lerpAmount);
 		
 		rotationYaw = driveable.axes.getYaw() - 90;
 		rotationPitch = driveable.axes.getPitch();

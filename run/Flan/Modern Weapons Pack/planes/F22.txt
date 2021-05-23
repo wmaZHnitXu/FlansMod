@@ -1,12 +1,12 @@
 // ------------------------------------------------------ Naming ------------------------------------------------------
-Name F22 Raptor
+Name СВВП
 ShortName f22
 // ------------------------------------------------------ Visuals ------------------------------------------------------
 Icon F22
 Model mw.F22
 Texture SkinF22
 //Third Person Camera Distance
-CameraDistance 300.0
+CameraDistance 14
 //Resting Pitch. Set this so the plane spawns level. It will fall onto its collision boxes automatically, but this lets you start it flat
 RestingPitch 5.0
 HasGear True
@@ -15,7 +15,7 @@ HasDoor True
 //Mode : One of Plane, Heli or VTOL. The VTOL has a toggle button that switches some model aesthetics and the flight mode
 Mode VTOL
 //Throttle
-MaxThrottle 8.0
+MaxThrottle 6.0
 MaxNegativeThrottle 0.0
 //Yaw modifiers
 TurnLeftSpeed 2.5

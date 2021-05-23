@@ -3,6 +3,8 @@ package com.flansmod.common.guns;
 import java.util.List;
 import java.util.UUID;
 
+import javax.vecmath.Vector3d;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.particle.Particle;
@@ -35,6 +37,7 @@ import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
+import com.ibm.icu.util.BytesTrie.Result;
 
 import io.netty.buffer.ByteBuf;
 
@@ -45,6 +48,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	private static int bulletLife = 600; // Kill bullets after 30 seconds
 	public int ticksInAir;
 	
+	private float initSpeed;
 	private FiredShot shot;
 	/**
 	 * For homing missiles
@@ -62,6 +66,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 	private UUID playeruuid;
 	private UUID shooteruuid;
 	private boolean checkforuuids;
+	private boolean checked;
 
 	public EntityBullet(World world)
 	{
@@ -83,6 +88,8 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		setArrowHeading(motionX, motionY, motionZ, shot.getFireableGun().getGunSpread() * shot.getBulletType().bulletSpread, shot.getFireableGun().getBulletSpeed());
 		
 		currentPenetratingPower = shot.getBulletType().penetratingPower;
+		initSpeed = shot.getFireableGun().getBulletSpeed();
+		checked = false;
 	}
 
 	@Override
@@ -111,7 +118,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		prevRotationYaw = rotationYaw = (float)((Math.atan2(d, d2) * 180D) / 3.1415927410125732D);
 		prevRotationPitch = rotationPitch = (float)((Math.atan2(d1, f3) * 180D) / 3.1415927410125732D);
 		
-		getLockOnTarget();
+		//getLockOnTarget(); ANET для красоты
 	}
 	
 	/**
@@ -173,6 +180,11 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		
 		try
 		{
+			//ANET dlya krasoty
+			if (ticksExisted > 10 && !checked) {
+				getLockOnTarget();
+				checked = true;
+			}
 			//This checks if the shooter and/or player can be found. If they are loaded/online they will be included in the FiredShot data, if not this data will be deleted/ignored
 			if (checkforuuids)
 			{
@@ -272,7 +284,6 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			if(world.isRemote)
 			{
 				onUpdateClient();
-				return;
 			}
 			
 			
@@ -330,25 +341,20 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			// Apply homing action
 			if(lockedOnTo != null)
 			{
+
 				double dX = lockedOnTo.posX - posX;
 				double dY = lockedOnTo.posY - posY;
 				double dZ = lockedOnTo.posZ - posZ;
-				double dXYZ = dX * dX + dY * dY + dZ * dZ;
+				Vector3d startv = new Vector3d(motionX, motionY, motionZ);
+				Vector3d targetDir = new Vector3d(dX, dY, dZ);
+				targetDir.normalize();
+				targetDir.scale(2);
+				startv = linearLerp(startv, targetDir, 0.03d);
+				motionX = startv.getX();
+				motionY = startv.getY();
+				motionZ = startv.getZ();
+
 				
-				Vector3f relPosVec = new Vector3f(dX, dY, dZ);
-				float angle = Math.abs(Vector3f.angle(motion, relPosVec));
-				
-				double lockOnPull = (angle) * type.lockOnForce;
-				
-				lockOnPull = lockOnPull * lockOnPull;
-				
-				motionX *= 0.95f;
-				motionY *= 0.95f;
-				motionZ *= 0.95f;
-				
-				motionX += lockOnPull * dX / dXYZ;
-				motionY += lockOnPull * dY / dXYZ;
-				motionZ += lockOnPull * dZ / dXYZ;
 			}
 			
 		}
@@ -357,6 +363,16 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 			ex.printStackTrace();
 			super.setDead();
 		}
+	}
+
+	private Vector3d linearLerp (Vector3d from, Vector3d to, double speed) {
+		double x = from.getX();
+		double y = from.getY();
+		double z = from.getZ();
+		if (x < to.getX()) {x += speed; if (x > to.getX()) x = to.getX();} else {x -= speed; if (x < to.getX()) x = to.getX();}
+		if (z < to.getZ()) {z += speed; if (z > to.getZ()) z = to.getZ();} else {z -= speed; if (z < to.getZ()) z = to.getZ();}
+		if (y < to.getY()) {y += speed; if (y > to.getY()) y = to.getY();} else {y -= speed; if (y < to.getY()) y = to.getY();}
+		return new Vector3d(x,y,z);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -465,6 +481,7 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 		}
 		
 		shot = new FiredShot(fireablegun, type);
+		initSpeed = fireablegun.getBulletSpeed();
 	}
 	
 	@Override
