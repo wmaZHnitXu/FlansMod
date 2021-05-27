@@ -68,6 +68,7 @@ import com.flansmod.client.model.RenderNull;
 import com.flansmod.client.model.RenderParachute;
 import com.flansmod.client.model.RenderPlane;
 import com.flansmod.client.model.RenderVehicle;
+import com.flansmod.client.model.mw.ModelSentryCannon;
 import com.flansmod.client.model.mw.ModelSentryMg;
 import com.flansmod.common.CommonProxy;
 import com.flansmod.common.EntityItemCustomRender;
@@ -425,6 +426,7 @@ public class ClientProxy extends CommonProxy
 	public <T> T hardcodedModels (String s, Class<T> typeClass) {
 		switch (s) {
 			case "mw.SentryMgHC": return typeClass.cast(new ModelSentryMg());
+			case "mw.SentryCannonHC": return typeClass.cast(new ModelSentryCannon());
 		}
 		return null;
 	}

@@ -3,7 +3,7 @@ ShortName launcher2
 //The ammo this gun uses (shortName)
 Ammo stingerAmmo
 Ammo lockonAmmo
-Ammo empRocketAmmo
+Ammo emprocketAmmo
 Ammo starkAmmo
 Ammo highexplAmmo
 Icon launcher2

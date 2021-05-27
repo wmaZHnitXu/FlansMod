@@ -53,6 +53,7 @@ public class BulletType extends ShootableType
 	public String trailTexture = "defaultBulletTrail";
 	public boolean stark = false;
 	public ArrayList<PotionEffect> hitEffects = new ArrayList<>();
+	public boolean emp;
 	
 	/**
 	 * The static bullets list
@@ -74,6 +75,8 @@ public class BulletType extends ShootableType
 		{
 			if(split[0].equals("Stark"))
 				stark = true;
+			else if(split[0].equals("Emp"))
+				emp = true;
 			else if(split[0].equals("FlakParticles"))
 				flak = Integer.parseInt(split[1]);
 			else if(split[0].equals("FlakParticleType"))

@@ -20,8 +20,10 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -39,10 +41,12 @@ import com.flansmod.common.driveables.EntityVehicle;
 import com.flansmod.common.driveables.mechas.EntityMecha;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer;
 import com.flansmod.common.guns.raytracing.FlansModRaytracer.BulletHit;
+import com.flansmod.common.network.PacketPlaySound;
 import com.flansmod.common.types.InfoType;
 import com.flansmod.common.vector.Vector3f;
 import com.ibm.icu.util.BytesTrie.Result;
 
+import ic2.core.block.wiring.TileEntityElectricBlock;
 import io.netty.buffer.ByteBuf;
 
 public class EntityBullet extends EntityShootable implements IEntityAdditionalSpawnData
@@ -340,22 +344,46 @@ public class EntityBullet extends EntityShootable implements IEntityAdditionalSp
 						}
 					}
 				}
-				if (ticksExisted > 20 && type.stark) {
+				if (ticksExisted > 20) {
 					if (!world.isAirBlock(getPosition().add(0, -30, 0))) {
-						new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional(), type,
-								posX, posY, posZ, 1, false, false, false);
-						for (int i = 0; i < type.flak; i++) {
-							BulletType bullet = BulletType.getBullet(Item.getByNameOrId("flansmod:stark"));
-							FireableGun weapon = shot.getFireableGun();
-							FiredShot shota = new FiredShot(weapon, bullet);
-							Vector3f dir = new Vector3f(motionX + (rand.nextBoolean() ? -rand.nextDouble() : rand.nextDouble()),-1.25d -rand.nextDouble(),
-							 motionZ + (rand.nextBoolean() ? -rand.nextDouble() : rand.nextDouble()));
-							
-							ShotHandler.fireGun(world, shota, bullet.numBullets, new Vector3f(posX,posY,posZ), dir);
+						if (type.stark) {
+							new FlansModExplosion(world, shot.getShooterOptional().orElse(null), shot.getPlayerOptional(), type,
+									posX, posY, posZ, 1, false, false, false);
+							for (int i = 0; i < type.flak; i++) {
+								BulletType bullet = BulletType.getBullet(Item.getByNameOrId("flansmod:stark"));
+								FireableGun weapon = shot.getFireableGun();
+								FiredShot shota = new FiredShot(weapon, bullet);
+								Vector3f dir = new Vector3f(motionX + (rand.nextBoolean() ? -rand.nextDouble() : rand.nextDouble()) * 2,-1.25d -rand.nextDouble(),
+								motionZ + (rand.nextBoolean() ? -rand.nextDouble() : rand.nextDouble()) * 2);
+								
+								ShotHandler.fireGun(world, shota, bullet.numBullets, new Vector3f(posX,posY,posZ), dir);
+							}
+							setDead();
 						}
-						setDead();
+						else if (type.emp) {
+							BlockPos pos1 = getPosition().add(-30,-30,-30);
+							BlockPos pos2 = getPosition().add(30,30,30);
+							BlockPos.getAllInBox(pos1, pos2).forEach(pos -> {
+								if (!world.isAirBlock(pos)) {
+									TileEntity tile = world.getTileEntity(pos);
+									if (tile instanceof TileEntityElectricBlock) {
+										TileEntityElectricBlock eb = (TileEntityElectricBlock)tile;
+										eb.addEnergy(-300000);
+									}
+								}
+							});
+							ShotHandler.onDetonate(world, shot, new Vector3f(getPosition().getX(), getPosition().getY(), getPosition().getZ()));
+							PacketPlaySound.sendSoundPacket(getPosition().getX(), getPosition().getY(), getPosition().getZ(), 100, world.provider.getDimension(), "emp", false);
+							setDead();
+						}
 					}
-
+				}
+			} else {
+				if (ticksExisted > 20 && !world.isAirBlock(getPosition().add(0, -30, 0)) && type.emp) {
+					for (int i = 0; i < 300; i++) {
+						world.spawnParticle(EnumParticleTypes.PORTAL, rand.nextGaussian() * 10, rand.nextGaussian() * 10, rand.nextGaussian() * 10, 
+						0, 0, 0, new int[0]);
+					}
 				}
 			}
 			//TODO Client homing fix
