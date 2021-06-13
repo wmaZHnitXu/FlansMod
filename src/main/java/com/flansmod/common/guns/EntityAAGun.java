@@ -426,8 +426,8 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 						Vector3f shootingDirection;
 						if (target == null)
 							shootingDirection = new Vector3f(-Math.sin(radianYaw), -Math.sin(radianPitch), Math.cos(radianYaw)*Math.cos(radianPitch));
-						else shootingDirection = new Vector3f((target.getPositionVector().subtract(getPositionVector())).normalize());
-						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.damage);
+						else shootingDirection = new Vector3f(((target.getPositionVector().add(0,1,0)).subtract(origin)).normalize());
+						FireableGun weapon = new FireableGun(type, (float)type.damage, (float)type.accuracy, (float)type.bulletspeed);
 						FiredShot shot = new FiredShot(weapon, bullet, this, player);
 						//TODO use Vec3d
 						ShotHandler.fireGun(world, shot, bullet.numBullets, new Vector3f(origin), shootingDirection);
@@ -483,7 +483,9 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 	public boolean TargetTrace (Entity e) {
 		if (e == null) return false;
-		Vec3d targetV = e.getPositionVector();
+		Vec3d targetV =	rotate(type.barrelX[0] / 16D,
+						type.barrelY[0] / 16D,
+						type.barrelZ[0] / 16D).add(posX, posY, posZ);
 		Vec3d step = e.getPositionVector().subtract(getPositionVector().add(0,2,0)).normalize();
 		Vec3d currentPos = getPositionVector().add(0,2,0);
 		while (currentPos.distanceTo(targetV) > 2) {

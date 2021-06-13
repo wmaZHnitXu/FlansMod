@@ -21,7 +21,7 @@ public class ModelSentryCannon extends ModelAAGun //Same as Filename
 
 	public ModelSentryCannon() //Same as Filename
 	{
-		baseModel = new ModelRendererTurbo[11];
+		baseModel = new ModelRendererTurbo[10];
 		baseModel[0] = new ModelRendererTurbo(this, 329, 75, textureX, textureY); // Box 0
 		baseModel[1] = new ModelRendererTurbo(this, 65, 1, textureX, textureY); // Box 1
 		baseModel[2] = new ModelRendererTurbo(this, 121, 1, textureX, textureY); // Box 3
@@ -32,7 +32,6 @@ public class ModelSentryCannon extends ModelAAGun //Same as Filename
 		baseModel[7] = new ModelRendererTurbo(this, 410, 45, textureX, textureY); // Shape 8
 		baseModel[8] = new ModelRendererTurbo(this, 361, 1, textureX, textureY); // Shape 9
 		baseModel[9] = new ModelRendererTurbo(this, 385, 1, textureX, textureY); // Box 10
-		baseModel[10] = new ModelRendererTurbo(this, 51, 61, textureX, textureY); // Box 26
 
 		baseModel[0].addBox(0F, 0F, 0F, 14, 3, 14, 0F); // Box 0
 		baseModel[0].setRotationPoint(-7F, -2F, -7F);
@@ -70,11 +69,7 @@ public class ModelSentryCannon extends ModelAAGun //Same as Filename
 		baseModel[9].addBox(0F, 0F, 0F, 12, 4, 12, 0F); // Box 10
 		baseModel[9].setRotationPoint(-6F, -6F, -6F);
 
-		baseModel[10].addBox(0F, 0F, 0F, 5, 6, 7, 0F); // Box 26
-		baseModel[10].setRotationPoint(-2F, -20F, -4F);
-
-
-		seatModel = new ModelRendererTurbo[9];
+		seatModel = new ModelRendererTurbo[10];
 		seatModel[0] = new ModelRendererTurbo(this, 25, 17, textureX, textureY); // Box 12
 		seatModel[1] = new ModelRendererTurbo(this, 418, 4, textureX, textureY); // Box 13
 		seatModel[2] = new ModelRendererTurbo(this, 145, 17, textureX, textureY); // Shape 14
@@ -84,6 +79,7 @@ public class ModelSentryCannon extends ModelAAGun //Same as Filename
 		seatModel[6] = new ModelRendererTurbo(this, 337, 122, textureX, textureY); // Shape 19
 		seatModel[7] = new ModelRendererTurbo(this, 296, 182, textureX, textureY); // Box 18
 		seatModel[8] = new ModelRendererTurbo(this, 115, 77, textureX, textureY); // Box 19
+		seatModel[9] = new ModelRendererTurbo(this, 51, 61, textureX, textureY); // Box 26
 
 		seatModel[0].addBox(0F, 0F, 0F, 23, 1, 17, 0F); // Box 12
 		seatModel[0].setRotationPoint(-11F, -7F, -8.5F);
@@ -114,6 +110,9 @@ public class ModelSentryCannon extends ModelAAGun //Same as Filename
 
 		seatModel[8].addBox(0F, 0F, 0F, 18, 2, 12, 0F); // Box 19
 		seatModel[8].setRotationPoint(-23F, -26F, -10F);
+
+		seatModel[9].addBox(0F, 0F, 0F, 5, 6, 7, 0F); // Box 26
+		seatModel[9].setRotationPoint(-2F, -21F, -4F);
 
 
 		barrelModel = new ModelRendererTurbo[1][1];

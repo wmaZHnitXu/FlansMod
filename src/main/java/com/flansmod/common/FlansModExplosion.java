@@ -31,6 +31,8 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 
+import com.flansmod.common.guns.AAGunType;
+import com.flansmod.common.guns.BulletType;
 import com.flansmod.common.guns.EntityDamageSourceFlan;
 import com.flansmod.common.teams.TeamsManager;
 import com.flansmod.common.types.InfoType;
@@ -64,7 +66,7 @@ public class FlansModExplosion extends Explosion
 		this.y = y;
 		this.z = z;
 		this.causesFire = causesFire;
-		this.breaksBlocks = breaksBlocks && TeamsManager.explosions;
+		this.breaksBlocks = breaksBlocks && TeamsManager.explosions && !(type instanceof BulletType && ((BulletType) type).explosionBreaksBlocks);
 		this.position = new Vec3d(this.x, this.y, this.z);
 		this.type = type;
 		this.explosive = entity;

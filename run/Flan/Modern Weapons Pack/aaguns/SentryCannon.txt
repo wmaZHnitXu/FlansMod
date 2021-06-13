@@ -2,21 +2,21 @@
 Name CannonSentry
 ShortName sentrycannon
 //The ammo this gun uses (shortName)
-Ammo railammo
-Icon Sentryrail
+Ammo cannonshellbig
+Icon Sentrycannon
 Model mw.SentryCannonHC
 //Place the texture .png in the skins folder
 Texture sentrycannon
 NumBarrels 1
-Barrel 0 10 15 0
+Barrel 0 12 15 0
 FireAlternately False
 //Reload time in ticks, 1/20ths of a second
-ReloadTime 50
+ReloadTime 40
 Health 200
 //The amount of gun recoil
 Recoil 8
 //Damage in half hearts
-Damage 20000
+Damage 40
 //The higher this value, the more the bullets spread
 Accuracy 0
 ShareAmmo true
@@ -26,10 +26,10 @@ TargetPlayers true
 TargetVehicles true
 TargetPlanes true
 TargetMechas true
-TargetRange 100
+TargetRange 60
 //Time in ticks between rounds
 ShootDelay 100
-ShootSound RPGShoot
+ShootSound 90mm
 ReloadSound MWBazookaReload
 //The position of the player relative to the pivot
 GunnerPos 8 28 8
@@ -38,8 +38,8 @@ TopViewLimit 75
 BottomViewLimit 10
 RecipeOutput 1
 HasStatus true
-Consumption 16
-ShotConsumption 300000
+BulletSpeed 1.5
+Consumption 8
 Recipe I ingotIron B blockIron A aaBarrel L leather
  AA
 LAA

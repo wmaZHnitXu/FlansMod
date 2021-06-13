@@ -23,6 +23,7 @@ public class AAGunType extends InfoType
 	public List<BulletType> ammo = new ArrayList<>();
 	public int reloadTime;
 	public int recoil = 5;
+	public float bulletspeed = 3F;
 	public int accuracy;
 	public int damage;
 	public int shootDelay;
@@ -89,9 +90,12 @@ public class AAGunType extends InfoType
 			shareAmmo = Read(split, "ShareAmmo", shareAmmo);
 			targetRange = Read(split, "TargetRange", targetRange);
 			bottomViewLimit = Read(split, "BottomViewLimit", bottomViewLimit);
-			
+
 			if(split[0].equals("Consumption"))
 				consumption = Integer.parseInt(split[1]);
+
+			if(split[0].equals("BulletSpeed"))
+				bulletspeed = Float.parseFloat(split[1]);
 
 			if(split[0].equals("ShotConsumption"))
 				shotConsumption = Integer.parseInt(split[1]);
