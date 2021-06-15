@@ -483,11 +483,12 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 	public boolean TargetTrace (Entity e) {
 		if (e == null) return false;
-		Vec3d targetV =	rotate(type.barrelX[0] / 16D,
-						type.barrelY[0] / 16D,
-						type.barrelZ[0] / 16D).add(posX, posY, posZ);
-		Vec3d step = e.getPositionVector().subtract(getPositionVector().add(0,2,0)).normalize();
-		Vec3d currentPos = getPositionVector().add(0,2,0);
+		Vec3d targetV =	target.getPositionVector().add(0, 1, 0);
+		Vec3d origin = rotate(type.barrelX[0] / 16D,
+		type.barrelY[0] / 16D,
+		type.barrelZ[0] / 16D).add(posX, posY, posZ);
+		Vec3d step = e.getPositionVector().subtract(origin).normalize();
+		Vec3d currentPos = origin;
 		while (currentPos.distanceTo(targetV) > 2) {
 			currentPos = currentPos.add(step);
 			if (world.getBlockState(new BlockPos((int)currentPos.x,(int)currentPos.y,(int)currentPos.z)).isNormalCube()) return false;
