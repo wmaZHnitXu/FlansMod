@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import com.flansmod.common.driveables.EntityDriveable;
 import com.flansmod.common.driveables.EntityPlane;
 import com.flansmod.common.driveables.EntityVehicle;
+import com.flansmod.common.driveables.EnumPlaneMode;
 
 public class PacketDriveableControl extends PacketBase
 {
@@ -22,6 +23,7 @@ public class PacketDriveableControl extends PacketBase
 	public float throttle;
 	public float fuelInTank;
 	public float steeringYaw;
+	public int mode;
 	
 	public PacketDriveableControl()
 	{
@@ -53,6 +55,16 @@ public class PacketDriveableControl extends PacketBase
 		{
 			EntityPlane plane = (EntityPlane)driveable;
 			steeringYaw = plane.flapsYaw;
+			if (plane.getPlaneType().mode == EnumPlaneMode.VTOL) {
+				switch (plane.mode) {
+					case HELI:
+						mode = 1; break;
+					case PLANE:
+						mode = 2; break;
+					case VTOL:
+						mode = 0; break;
+				}
+			}
 		}
 	}
 	
@@ -75,6 +87,7 @@ public class PacketDriveableControl extends PacketBase
 		data.writeFloat(throttle);
 		data.writeFloat(fuelInTank);
 		data.writeFloat(steeringYaw);
+		data.writeInt(mode);
 	}
 	
 	@Override
@@ -96,6 +109,7 @@ public class PacketDriveableControl extends PacketBase
 		throttle = data.readFloat();
 		fuelInTank = data.readFloat();
 		steeringYaw = data.readFloat();
+		mode = data.readInt();
 	}
 	
 	@Override
@@ -120,6 +134,9 @@ public class PacketDriveableControl extends PacketBase
 	protected void updateDriveable(EntityDriveable driveable, boolean clientSide)
 	{
 		driveable.setPositionRotationAndMotion(posX, posY, posZ, yaw, pitch, roll, motX, motY, motZ, avelx, avely, avelz, throttle, steeringYaw);
+		if (mode != 0) {
+			((EntityPlane)driveable).mode = mode == 1 ? EnumPlaneMode.HELI : EnumPlaneMode.PLANE;
+		}
 		driveable.driveableData.fuelInTank = fuelInTank;
 	}
 	

@@ -39,9 +39,5 @@ GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical
 TopViewLimit 75
 BottomViewLimit 0
-RecipeOutput 1
+RecipeOutput 0
 HasStatus true
-Recipe I ingotIron B blockIron A aaBarrel L leather
- AA
-LAA
-IBI

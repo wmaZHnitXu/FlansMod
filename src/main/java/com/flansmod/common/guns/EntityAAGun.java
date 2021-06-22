@@ -475,7 +475,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					ammo.setCount(1);
 					candidate.decrStackSize(i, 1);
 					return true;
-				}
+				} 
 			}
 		}
 		return false;
@@ -483,7 +483,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 
 	public boolean TargetTrace (Entity e) {
 		if (e == null) return false;
-		Vec3d targetV =	target.getPositionVector().add(0, 1, 0);
+		Vec3d targetV =	e.getPositionVector().add(0, 1, 0);
 		Vec3d origin = rotate(type.barrelX[0] / 16D,
 		type.barrelY[0] / 16D,
 		type.barrelZ[0] / 16D).add(posX, posY, posZ);
@@ -719,7 +719,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 		TileEntity te = world.getTileEntity(getPosition().down());
 		if (te == null || te instanceof TileEntityElectricBlock) {
 			TileEntityElectricBlock storage = (TileEntityElectricBlock)te;
-			if (storage.getStored() > type.consumption)
+			if (storage.getStored() >= type.consumption)
 			storage.addEnergy(-type.consumption);
 
 			else status = getStatus();

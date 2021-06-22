@@ -13,7 +13,7 @@ RoundsPerItem 1
 //Number of bullet entities to create, useful for shotguns, defaults to 1
 NumBullets 8
 //The damage multiplier caused by the bullet on hitting an entity
-Damage 4
+Damage 1
 //Size of explosion caused
 Explosion 0
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating

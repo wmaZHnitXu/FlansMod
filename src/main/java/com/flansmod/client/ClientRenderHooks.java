@@ -192,8 +192,10 @@ public class ClientRenderHooks
 					float f2 = entityplayersp.getSwingProgress(partialTicks);
 					float f3 = entityplayersp.prevRotationPitch +
 							(entityplayersp.rotationPitch - entityplayersp.prevRotationPitch) * partialTicks;
-					float f4 = entityplayersp.prevRotationYaw +
+					/*float f4 = entityplayersp.prevRotationYaw +
 							(entityplayersp.rotationYaw - entityplayersp.prevRotationYaw) * partialTicks;
+							*/
+						float f4 = entityplayersp.rotationYaw;
 					
 					// Setup lighting
 					GlStateManager.disableLighting();
@@ -212,8 +214,10 @@ public class ClientRenderHooks
 					// Do hand rotations
 					float f5 = entityplayersp.prevRenderArmPitch +
 							(entityplayersp.renderArmPitch - entityplayersp.prevRenderArmPitch) * partialTicks;
-					float f6 = entityplayersp.prevRenderArmYaw +
+					/*float f6 = entityplayersp.prevRenderArmYaw +
 							(entityplayersp.renderArmYaw - entityplayersp.prevRenderArmYaw) * partialTicks;
+							*/
+					float f6 = entityplayersp.renderArmYaw;
 					GlStateManager.rotate((entityplayersp.rotationPitch - f5) * 0.1F, 1.0F, 0.0F, 0.0F);
 					GlStateManager.rotate((entityplayersp.rotationYaw - f6) * 0.1F, 0.0F, 1.0F, 0.0F);
 					
@@ -297,8 +301,10 @@ public class ClientRenderHooks
 			EntityPlayer entityplayer = (EntityPlayer)this.mc.getRenderViewEntity();
 			float f1 = entityplayer.distanceWalkedModified - entityplayer.prevDistanceWalkedModified;
 			float f2 = -(entityplayer.distanceWalkedModified + f1 * partialTicks);
-			float f3 =
+			/*float f3 =
 					entityplayer.prevCameraYaw + (entityplayer.cameraYaw - entityplayer.prevCameraYaw) * partialTicks;
+			*/
+			float f3 = entityplayer.cameraYaw;
 			float f4 = entityplayer.prevCameraPitch +
 					(entityplayer.cameraPitch - entityplayer.prevCameraPitch) * partialTicks;
 			GlStateManager.translate(MathHelper.sin(f2 * (float)Math.PI) * f3 * 0.5F,
@@ -535,7 +541,6 @@ public class ClientRenderHooks
 	private float interpolateRotation(float prevYawOffset, float yawOffset, float partialTicks)
 	{
 		float f;
-		
 		f = yawOffset - prevYawOffset;
 		while(f < -180.0F)
 		{
@@ -547,7 +552,8 @@ public class ClientRenderHooks
 			f -= 360.0F;
 		}
 		
-		return prevYawOffset + partialTicks * f;
+		//return prevYawOffset + partialTicks * f;
+		return yawOffset;
 	}
 	
 	// Handle player hiding / name tag removal for teams

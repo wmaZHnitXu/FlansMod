@@ -15,11 +15,11 @@ Barrel 3 0 21 -23
 FireAlternately False
 //Reload time in ticks, 1/20ths of a second
 ReloadTime 100
-Health 100
+Health 200
 //The amount of gun recoil
 Recoil 5
 //Damage in half hearts
-Damage 200
+Damage 1000
 //The higher this value, the more the bullets spread
 Accuracy 6
 ShareAmmo true
@@ -39,10 +39,6 @@ GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical
 TopViewLimit 75
 BottomViewLimit 10
-RecipeOutput 1
+RecipeOutput 0
 HasStatus true
-Consumption 32
-Recipe I ingotIron B blockIron A aaBarrel L leather
- AA
-LAA
-IBI
+Consumption 8

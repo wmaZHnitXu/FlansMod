@@ -6,7 +6,7 @@ Texture MIM23
 Colour 255 255 255
 Icon MIM23Rocket
 //How affected by gravity the bullet is
-FallSpeed 0.25
+FallSpeed 0.1
 //The maximum stack size
 MaxStackSize 1
 //The number of rounds each item has. Limited to 32000.
@@ -15,7 +15,7 @@ RoundsPerItem 4
 DamageVsLiving 200
 DamageVsVehicles 200
 //Size of explosion caused
-Explosion 1
+Explosion 2
 //True if bullet explodes on hitting anything. Fuse denotes the maximum time it may spend in the air before detonating
 ExplodeOnImpact True
 Fuse 0
@@ -36,7 +36,7 @@ LockOnToVehicles False
 LockOnToMechas False
 LockOnToPlayers True
 LockOnToLivings False
-MaxLockOnAngle 20.0
+MaxLockOnAngle 45.0
 //Recipe
 RecipeOutput 1
 Recipe B smallBomb F fiberglass I ingotIron R blockRedstone
