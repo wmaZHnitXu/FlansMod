@@ -478,5 +478,17 @@
     "sounds": [
       "flansmod:JetIdle"
     ]
+  },
+  "emp": {
+    "category": "player",
+    "sounds": [
+      "flansmod:emp"
+    ]
+  },
+  "rail": {
+    "category": "player",
+    "sounds": [
+      "flansmod:rail"
+    ]
   }
 }

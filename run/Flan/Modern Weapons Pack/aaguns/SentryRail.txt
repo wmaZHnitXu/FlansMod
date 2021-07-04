@@ -29,14 +29,16 @@ TargetMechas true
 TargetRange 100
 //Time in ticks between rounds
 ShootDelay 1000
-ShootSound RPGShoot
+ShootSound rail
 ReloadSound MWBazookaReload
 //The position of the player relative to the pivot
 GunnerPos 8 28 8
 //Degrees above and below level that the gun can work within. 90 degrees is vertical
+BulletSpeed 40.0
 TopViewLimit 75
 BottomViewLimit 10
 RecipeOutput 0
 HasStatus true
 Consumption 8
 ShotConsumption 300000
+Description Strelyaet po igrokam, 1 vistrel = 300000 EU.

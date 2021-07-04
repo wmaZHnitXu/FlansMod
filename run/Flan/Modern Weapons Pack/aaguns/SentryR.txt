@@ -42,3 +42,4 @@ BottomViewLimit 10
 RecipeOutput 0
 HasStatus true
 Consumption 8
+Descrption Strelyaet tol'ko po igrokam!

@@ -43,4 +43,4 @@ AllowStockAttachments false
 AllowGripAttachments false
 NumGenericAttachmentSlots 0
 //Description - note the ammo type
-Description Ammo Type : Heavy Pistol
+Description Ammo Type : Patroni dlya pistoleta

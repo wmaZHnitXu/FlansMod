@@ -38,5 +38,6 @@ TopViewLimit 75
 BottomViewLimit 10
 RecipeOutput 0
 HasStatus true
-BulletSpeed 1.5
+BulletSpeed 10.0
 Consumption 8
+Description Strelyaet tol'ko po igrokam!

@@ -41,3 +41,4 @@ BottomViewLimit 15
 RecipeOutput 0
 HasStatus true
 Consumption 4
+Description Strelyaet po vsem.

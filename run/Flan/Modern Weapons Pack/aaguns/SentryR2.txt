@@ -40,3 +40,4 @@ BottomViewLimit 10
 RecipeOutput 0
 HasStatus true
 Consumption 8
+Description Strelyaet tol'ko po zombikam!

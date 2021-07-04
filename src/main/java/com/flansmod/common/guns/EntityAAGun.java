@@ -523,7 +523,7 @@ public class EntityAAGun extends Entity implements IEntityAdditionalSpawnData
 					if(candidateEntity instanceof EntityPlayer)
 					{
 						EntityPlayer plr = (EntityPlayer)candidateEntity;
-						if(candidateEntity == placer || GetTeamCodeFromString(plr.getDisplayNameString()) == GetTeamCodeFromString(placerDispName))
+						if(candidateEntity == placer || GetTeamCodeFromString(plr.getDisplayNameString()) == GetTeamCodeFromString(placerDispName) || plr.capabilities.isCreativeMode)
 							continue;
 						/*if(TeamsManager.enabled && TeamsManager.getInstance().currentRound != null && placer != null)
 						{
